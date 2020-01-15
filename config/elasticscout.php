@@ -24,10 +24,13 @@ return [
     /**
      * Choose the method of indexing.
      *
-     * simple: the indexing takes place one-by-one
-     * multiple: the indexing is done in bulks
+     * SimpleIndexer indexes the data document by document.
+     * \Rennokki\ElasticScout\Indexers\SimpleIndexer::class
+     *
+     * MultipleIndexer indexes the data in bulks.
+     * \Rennokki\ElasticScout\Indexers\MultipleIndexer::class
      */
-    'indexer' => env('SCOUT_ELASTICSEARCH_INDEXER', 'simple'),
+    'indexer' => \Rennokki\ElasticScout\Indexers\SimpleIndexer::class,
 
     /**
      * Each time a document is created, updated or deleted, update the mapping

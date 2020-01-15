@@ -65,10 +65,7 @@ class ElasticScoutEngine extends Engine
                     return true;
                 }
 
-                Artisan::call(
-                    'elasticscout:index:sync',
-                    ['model' => $modelClass]
-                );
+                $model->getIndex()->syncMapping();
 
                 $self::$updatedMappings[] = $modelClass;
             });
