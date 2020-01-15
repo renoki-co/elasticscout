@@ -18,6 +18,14 @@ class IndexCommandsTest extends TestCase
             'model' => get_class($restaurant),
         ]);
 
+        $rawMapping = $index->getRawMapping();
+        $rawSettings = $index->getRawSettings();
+
+        $this->assertEquals($index->getMapping()['properties'], $rawMapping['properties']);
+        $this->assertEquals($index->getMapping()['_meta'], $rawMapping['_meta']);
+
+        $this->assertEquals($index->getSettings()['analysis'], $rawSettings['analysis']);
+
         $this->assertTrue($index->exists());
         $this->assertTrue($index->hasAlias());
     }

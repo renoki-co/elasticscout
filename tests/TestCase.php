@@ -6,21 +6,13 @@ use Exception;
 use Laravel\Scout\ScoutServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Rennokki\ElasticScout\ElasticScoutServiceProvider;
+use Rennokki\ElasticScout\Facades\ElasticClient;
 use Rennokki\ElasticScout\Tests\Models\Book;
 use Rennokki\ElasticScout\Tests\Models\Post;
 use Rennokki\ElasticScout\Tests\Models\Restaurant;
 
 abstract class TestCase extends Orchestra
 {
-    /**
-     * The models whose indices will be flushed.
-     *
-     * @var array
-     */
-    protected static $models = [
-        Book::class, Restaurant::class, Post::class,
-    ];
-
     /**
      * Set up the test case.
      *
@@ -128,12 +120,6 @@ abstract class TestCase extends Orchestra
      */
     protected function resetCluster(): void
     {
-        foreach (self::$models as $model) {
-            try {
-                (new $model)->getIndex()->delete();
-            } catch (Exception $e) {
-                //
-            }
-        }
+        ElasticClient::indices()->delete(['index' => '*']);
     }
 }

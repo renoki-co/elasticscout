@@ -111,7 +111,7 @@ abstract class Index
 
         // Set additional data for the index
         Arr::set($mapping, '_meta', [
-            'model' => get_class($this->model),
+            'model_class' => get_class($this->model),
         ]);
 
         return $mapping;
@@ -222,6 +222,7 @@ abstract class Index
             return $this->sync();
         }
 
+        // Set settings of the index right at creation.
         $payload =
             $this
                 ->getPayloadInstance()
@@ -229,7 +230,7 @@ abstract class Index
                 ->get();
 
         ElasticClient::indices()
-            ->create($payload);
+            ->create($this->getPayload());
 
         // If the index is migratable, it means it has to have an alias
         // in case of a migration might occur in the near future.
@@ -377,9 +378,55 @@ abstract class Index
                 ->set('body.settings', $this->getSettings())
                 ->get();
 
-        ElasticClient::indices()
-            ->putSettings($payload);
+        try {
+            ElasticClient::indices()
+                ->close($this->getPayload());
+
+            ElasticClient::indices()
+                ->putSettings($payload);
+
+            ElasticClient::indices()
+                ->close($this->getPayload());
+        } catch (Exception $e) {
+            ElasticClient::indices()
+                ->close($this->getPayload());
+
+            return false;
+        }
 
         return true;
+    }
+
+    /**
+     * Get the raw index from the API.
+     *
+     * @return array
+     */
+    public function getRaw(): array
+    {
+        return ElasticClient::indices()->get($this->getPayload())
+            [$this->getName()] ?? [];
+    }
+
+    /**
+     * Get the raw mapping from the API.
+     *
+     * @return array
+     */
+    public function getRawMapping(): array
+    {
+        return ElasticClient::indices()->getMapping($this->getPayload())
+            [$this->getName()]['mappings'] ?? [];
+    }
+
+    /**
+     * Get raw settings from the API.
+     *
+     * @return array
+     */
+    public function getRawSettings(): array
+    {
+        return ElasticClient::indices()->getSettings($this->getPayload())
+            [$this->getName()]['settings']['index'] ?? [];
     }
 }
