@@ -111,7 +111,7 @@ abstract class Index
 
         // Set additional data for the index
         Arr::set($mapping, '_meta', [
-            'model' => get_class($this->model),
+            'model_class' => get_class($this->model),
         ]);
 
         return $mapping;
@@ -222,6 +222,7 @@ abstract class Index
             return $this->sync();
         }
 
+        // Set settings of the index right at creation.
         $payload =
             $this
                 ->getPayloadInstance()
@@ -229,7 +230,7 @@ abstract class Index
                 ->get();
 
         ElasticClient::indices()
-            ->create($payload);
+            ->create($this->getPayload());
 
         // If the index is migratable, it means it has to have an alias
         // in case of a migration might occur in the near future.
@@ -250,7 +251,7 @@ abstract class Index
         }
 
         if (! $this->exists()) {
-            $this->create();
+            $this->sync();
         }
 
         ElasticClient::indices()
@@ -288,35 +289,14 @@ abstract class Index
     public function sync(): bool
     {
         if (! $this->exists()) {
-            return $this->create();
+            $this->create();
         }
 
-        $indices = ElasticClient::indices();
-        $payload = $this->getPayload();
+        // Sync the Settings
+        $this->syncSettings();
 
-        try {
-            $indices->close($payload);
-
-            // Sync settings
-            if ($settings = $this->getSettings()) {
-                $indices->putSettings(
-                    $this
-                        ->getPayloadInstance()
-                        ->set('body.settings', $settings)
-                        ->get()
-
-                );
-            }
-
-            // Sync Mapping
-            $this->syncMapping();
-
-            $indices->open($payload);
-        } catch (Exception $e) {
-            $indices->open($payload);
-
-            throw $e;
-        }
+        // Sync the Mapping
+        $this->syncMapping();
 
         // If the index is migratable, also
         // sync its alias to the cluster.
@@ -358,7 +338,7 @@ abstract class Index
         }
 
         if (! $this->exists()) {
-            $this->create();
+            $this->sync();
         }
 
         $payload =
@@ -375,5 +355,78 @@ abstract class Index
             ->putMapping($payload->get());
 
         return true;
+    }
+
+    /**
+     * Sync the settings to the cluster.
+     *
+     * @return bool
+     */
+    public function syncSettings(): bool
+    {
+        if (! $this->getSettings()) {
+            return false;
+        }
+
+        if (! $this->exists()) {
+            $this->sync();
+        }
+
+        $payload =
+            $this
+                ->getPayloadInstance()
+                ->set('body.settings', $this->getSettings())
+                ->get();
+
+        try {
+            ElasticClient::indices()
+                ->close($this->getPayload());
+
+            ElasticClient::indices()
+                ->putSettings($payload);
+
+            ElasticClient::indices()
+                ->open($this->getPayload());
+        } catch (Exception $e) {
+            ElasticClient::indices()
+                ->open($this->getPayload());
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Get the raw index from the API.
+     *
+     * @return array
+     */
+    public function getRaw(): array
+    {
+        return ElasticClient::indices()->get($this->getPayload())
+            [$this->getName()] ?? [];
+    }
+
+    /**
+     * Get the raw mapping from the API.
+     *
+     * @return array
+     */
+    public function getRawMapping(): array
+    {
+        return ElasticClient::indices()->getMapping($this->getPayload())
+            [$this->getName()]['mappings'] ?? [];
+    }
+
+    /**
+     * Get raw settings from the API.
+     *
+     * @return array
+     */
+    public function getRawSettings(): array
+    {
+        return ElasticClient::indices()->getSettings($this->getPayload())
+            [$this->getName()]['settings']['index'] ?? [];
     }
 }

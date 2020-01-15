@@ -2,25 +2,16 @@
 
 namespace Rennokki\ElasticScout\Tests;
 
-use Exception;
 use Laravel\Scout\ScoutServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Rennokki\ElasticScout\ElasticScoutServiceProvider;
+use Rennokki\ElasticScout\Facades\ElasticClient;
 use Rennokki\ElasticScout\Tests\Models\Book;
 use Rennokki\ElasticScout\Tests\Models\Post;
 use Rennokki\ElasticScout\Tests\Models\Restaurant;
 
 abstract class TestCase extends Orchestra
 {
-    /**
-     * The models whose indices will be flushed.
-     *
-     * @var array
-     */
-    protected static $models = [
-        Book::class, Restaurant::class, Post::class,
-    ];
-
     /**
      * Set up the test case.
      *
@@ -91,9 +82,9 @@ abstract class TestCase extends Orchestra
                     ],
                 ],
             ],
-            'indexer' => env('SCOUT_ELASTICSEARCH_INDEXER', 'simple'),
-            'update_mapping_on_save' => env('SCOUT_ELASTICSEARCH_UPDATE_MAPPING_ON_SAVE', true),
-            'refresh_document_on_save' => env('SCOUT_ELASTICSEARCH_REFRESH_ON_SAVE', false),
+            'indexer' => env('SCOUT_ELASTICSEARCH_INDEXER', \Rennokki\ElasticScout\Indexers\SimpleIndexer::class),
+            'sync_mapping_on_save' => env('SCOUT_ELASTICSEARCH_SYNC_MAPPING_ON_SAVE', true),
+            'refresh_document_on_save' => env('SCOUT_ELASTICSEARCH_REFRESH_DOCUMENT_ON_SAVE', false),
         ]);
 
         $app['config']->set('scout', [
@@ -128,12 +119,6 @@ abstract class TestCase extends Orchestra
      */
     protected function resetCluster(): void
     {
-        foreach (self::$models as $model) {
-            try {
-                (new $model)->getIndex()->delete();
-            } catch (Exception $e) {
-                //
-            }
-        }
+        ElasticClient::indices()->delete(['index' => '*']);
     }
 }

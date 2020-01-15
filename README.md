@@ -429,6 +429,17 @@ class NameRule extends SearchRule
             ],
         ];
     }
+
+    public function buildQueryPayload(SearchQueryBuilder $builder)
+    {
+        return [
+            'should' => [
+                'match' => [
+                    'name' => $builder->query,
+                ],
+            ],
+        ];
+    }
 }
 ```
 
@@ -446,7 +457,6 @@ $nameAsString = $restaurant->highlight->nameAsString;
 **In case you need to pass arguments to the rules, you can do so by adding your construct method.**
 
 ```php
-// app/SearchRules/NameRule.php
 class NameRule extends SearchRule
 {
     protected $name;

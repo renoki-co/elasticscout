@@ -21,9 +21,10 @@
     </filter>
     <php>
         <server name="SCOUT_DRIVER" value="elasticscout" />
-        <server name="SCOUT_PREFIX" value="test" />
+        <server name="SCOUT_PREFIX" value="test_" />
         <server name="SCOUT_QUEUE_CONNECTION" value="sync" />
         <server name="SCOUT_ELASTICSEARCH_HOST" value="127.0.0.1" />
         <server name="SCOUT_ELASTICSEARCH_PORT" value="9200" />
+        <server name="SCOUT_ELASTICSEARCH_REFRESH_DOCUMENT_ON_SAVE" value="true" />
     </php>
 </phpunit>

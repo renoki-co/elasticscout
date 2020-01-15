@@ -4,7 +4,6 @@ namespace Rennokki\ElasticScout\Indexers;
 
 use Illuminate\Database\Eloquent\Collection;
 use Rennokki\ElasticScout\Facades\ElasticClient;
-use Rennokki\ElasticScout\Migratable;
 use Rennokki\ElasticScout\Payloads\DocumentPayload;
 
 class SimpleIndexer implements Indexer
@@ -33,7 +32,7 @@ class SimpleIndexer implements Indexer
             $payload = (new DocumentPayload($model))
                 ->set('body', $modelData);
 
-            if (in_array(Migratable::class, class_uses_recursive($index))) {
+            if ($index->isMigratable()) {
                 $payload->useAlias('write');
             }
 

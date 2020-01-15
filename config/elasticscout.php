@@ -24,16 +24,19 @@ return [
     /**
      * Choose the method of indexing.
      *
-     * simple: the indexing takes place one-by-one
-     * multiple: the indexing is done in bulks
+     * SimpleIndexer indexes the data document by document.
+     * \Rennokki\ElasticScout\Indexers\SimpleIndexer::class
+     *
+     * MultipleIndexer indexes the data in bulks.
+     * \Rennokki\ElasticScout\Indexers\MultipleIndexer::class
      */
-    'indexer' => env('SCOUT_ELASTICSEARCH_INDEXER', 'simple'),
+    'indexer' => \Rennokki\ElasticScout\Indexers\SimpleIndexer::class,
 
     /**
      * Each time a document is created, updated or deleted, update the mapping
      * attached to the index of the model.
      */
-    'update_mapping_on_save' => env('SCOUT_ELASTICSEARCH_UPDATE_MAPPING_ON_SAVE', true),
+    'sync_mapping_on_save' => env('SCOUT_ELASTICSEARCH_SYNC_MAPPING_ON_SAVE', true),
 
     /**
      * Elasticsearch "caches" some of the documents and reveals them
@@ -43,5 +46,5 @@ return [
      * Recommended for production: false
      * Recommended for local/testing: true
      */
-    'refresh_document_on_save' => env('SCOUT_ELASTICSEARCH_REFRESH_ON_SAVE', false),
+    'refresh_document_on_save' => env('SCOUT_ELASTICSEARCH_REFRESH_DOCUMENT_ON_SAVE', true),
 ];

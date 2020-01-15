@@ -4,7 +4,6 @@ namespace Rennokki\ElasticScout\Indexers;
 
 use Illuminate\Database\Eloquent\Collection;
 use Rennokki\ElasticScout\Facades\ElasticClient;
-use Rennokki\ElasticScout\Migratable;
 use Rennokki\ElasticScout\Payloads\RawPayload;
 use Rennokki\ElasticScout\Payloads\TypePayload;
 
@@ -20,7 +19,7 @@ class MultipleIndexer implements Indexer
 
         $payload = new TypePayload($model);
 
-        if (in_array(Migratable::class, class_uses_recursive($index))) {
+        if ($index->isMigratable()) {
             $payload->useAlias('write');
         }
 

@@ -15,7 +15,23 @@ class RestaurantIndex extends Index
      * @var array
      */
     protected $settings = [
-        //
+        'analysis' => [
+            'filter' => [
+                'autocomplete_filter' => [
+                    'type' => 'edge_ngram',
+                    'min_gram' => 1,
+                    'max_gram' => 20,
+                ],
+            ],
+            'analyzer' => [
+                'autocomplete' => [
+                    'type' => 'custom',
+                    'tokenizer' => 'standard',
+                    'filter' => ['lowercase', 'autocomplete_filter'],
+                ],
+            ],
+        ],
+
     ];
 
     /**
@@ -25,6 +41,11 @@ class RestaurantIndex extends Index
      */
     protected $mapping = [
         'properties' => [
+            'name' => [
+                'type' => 'text',
+                'analyzer' => 'autocomplete',
+                'search_analyzer' => 'standard',
+            ],
             'location' => [
                 'type' => 'geo_point',
             ],

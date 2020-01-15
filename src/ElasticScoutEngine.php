@@ -3,9 +3,7 @@
 namespace Rennokki\ElasticScout;
 
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Artisan;
 use Laravel\Scout\Builder;
 use Laravel\Scout\Engines\Engine;
 use Rennokki\ElasticScout\Builders\SearchQueryBuilder;
@@ -28,7 +26,7 @@ class ElasticScoutEngine extends Engine
      *
      * @var bool
      */
-    protected $updateMapping;
+    protected $syncMappingOnSave;
 
     /**
      * The updated mappings.
@@ -41,13 +39,13 @@ class ElasticScoutEngine extends Engine
      * ElasticScoutEngine constructor.
      *
      * @param  \Rennokki\ElasticScout\Indexers\Indexer  $indexer
-     * @param  bool  $updateMapping
+     * @param  bool  $syncMappingOnSave
      * @return void
      */
-    public function __construct(Indexer $indexer, $updateMapping)
+    public function __construct(Indexer $indexer, $syncMappingOnSave)
     {
         $this->indexer = $indexer;
-        $this->updateMapping = $updateMapping;
+        $this->syncMappingOnSave = $syncMappingOnSave;
     }
 
     /**
@@ -55,7 +53,7 @@ class ElasticScoutEngine extends Engine
      */
     public function update($models)
     {
-        if ($this->updateMapping) {
+        if ($this->syncMappingOnSave) {
             $self = $this;
 
             $models->each(function ($model) use ($self) {
@@ -65,10 +63,7 @@ class ElasticScoutEngine extends Engine
                     return true;
                 }
 
-                Artisan::call(
-                    'elasticscout:index:sync',
-                    ['model' => $modelClass]
-                );
+                $model->getIndex()->syncMapping();
 
                 $self::$updatedMappings[] = $modelClass;
             });
@@ -329,22 +324,6 @@ class ElasticScoutEngine extends Engine
             });
 
         return $count;
-    }
-
-    /**
-     * Make a raw search.
-     *
-     * @param  \Illuminate\Database\Eloquent\Model  $model
-     * @param  array  $query
-     * @return mixed
-     */
-    public function searchRaw(Model $model, $query)
-    {
-        $payload = (new TypePayload($model))
-            ->setIfNotEmpty('body', $query)
-            ->get();
-
-        return ElasticClient::search($payload);
     }
 
     /**
