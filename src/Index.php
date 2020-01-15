@@ -291,32 +291,11 @@ abstract class Index
             return $this->create();
         }
 
-        $indices = ElasticClient::indices();
-        $payload = $this->getPayload();
+        // Sync the Settings
+        $this->syncSettings();
 
-        try {
-            $indices->close($payload);
-
-            // Sync settings
-            if ($settings = $this->getSettings()) {
-                $indices->putSettings(
-                    $this
-                        ->getPayloadInstance()
-                        ->set('body.settings', $settings)
-                        ->get()
-
-                );
-            }
-
-            // Sync Mapping
+        // Sync the Mapping
             $this->syncMapping();
-
-            $indices->open($payload);
-        } catch (Exception $e) {
-            $indices->open($payload);
-
-            throw $e;
-        }
 
         // If the index is migratable, also
         // sync its alias to the cluster.
@@ -373,6 +352,33 @@ abstract class Index
 
         ElasticClient::indices()
             ->putMapping($payload->get());
+
+        return true;
+    }
+
+    /**
+     * Sync the settings to the cluster.
+     *
+     * @return bool
+     */
+    public function syncSettings(): bool
+    {
+        if (! $this->getSettings()) {
+            return false;
+        }
+
+        if (! $this->exists()) {
+            $this->sync();
+        }
+
+        $payload =
+            $this
+                ->getPayloadInstance()
+                ->set('body.settings', $this->getSettings())
+                ->get();
+
+        ElasticClient::indices()
+            ->putSettings($payload);
 
         return true;
     }
