@@ -193,24 +193,6 @@ abstract class Index
     }
 
     /**
-     * Get the synced mappings from the cluster.
-     *
-     * @return array
-     */
-    public function getMappingFromCluster(): array
-    {
-        if (! $this->exists()) {
-            return [];
-        }
-
-        $mappings =
-            ElasticClient::indices()
-                ->getMapping($this->getPayload());
-
-        return $mappings[$this->getName()]['mappings'] ?? [];
-    }
-
-    /**
      * Create this index in the Elasticsearch cluster.
      * In case it is migratable, also create alias.
      *
