@@ -30,7 +30,7 @@ class RestaurantIndex extends Index
                     'filter' => ['lowercase', 'autocomplete_filter'],
                 ],
             ],
-        ]
+        ],
 
     ];
 

@@ -2,7 +2,6 @@
 
 namespace Rennokki\ElasticScout\Tests;
 
-use Rennokki\ElasticScout\Tests\Models\Post;
 use Rennokki\ElasticScout\Tests\Models\Restaurant;
 
 class RefreshOnSaveTest extends TestCase
