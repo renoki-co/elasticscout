@@ -10,7 +10,7 @@ class QueryTest extends TestCase
 {
     public function test_search_book_by_name()
     {
-        $book = factory(Book::class)->make();
+        $book = factory(Book::class)->make(['name' => 'Sun Tzu: Art of War']);
         $book->getIndex()->sync();
         $book->save();
 
@@ -21,26 +21,22 @@ class QueryTest extends TestCase
 
     public function test_search_book_by_partial_starting_name_leads_to_no_results()
     {
-        $book = factory(Book::class)->make();
+        $book = factory(Book::class)->make(['name' => 'Rumpelstiltskin']);
         $book->getIndex()->sync();
         $book->save();
 
-        $partialBookName = substr($book->name, 0, 5);
-
         $this->assertNull(
-            Book::search($partialBookName)->first()
+            Book::search('Rumpelstil')->first()
         );
     }
 
     public function test_search_restaurant_by_partial_name_leads_to_results_due_to_ngram_analyzer()
     {
-        $restaurant = factory(Restaurant::class)->make();
+        $restaurant = factory(Restaurant::class)->make(['name' => 'Dominos']);
         $restaurant->getIndex()->sync();
         $restaurant->save();
 
-        $partialRestaurantName = substr($restaurant->name, 0, 5);
-
-        $searchResult = Restaurant::search($partialRestaurantName)->first();
+        $searchResult = Restaurant::search('Domin')->first();
 
         $this->assertTrue($searchResult->is($restaurant));
     }
