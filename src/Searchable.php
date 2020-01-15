@@ -112,12 +112,12 @@ trait Searchable
     /**
      * Set the highlight attribute.
      *
-     * @param  \Rennokki\ElasticScout\Highlight $value
+     * @param  \Rennokki\ElasticScout\Highlight  $highlight
      * @return void
      */
-    public function setHighlightAttribute(Highlight $value)
+    public function setHighlightAttribute(Highlight $highlight)
     {
-        $this->highlight = $value;
+        $this->highlight = $highlight;
     }
 
     /**
