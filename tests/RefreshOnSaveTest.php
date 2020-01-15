@@ -16,13 +16,11 @@ class RefreshOnSaveTest extends TestCase
         $restaurant->getIndex()->sync();
         $restaurant->save();
 
-        $this->assertEquals(Restaurant::search('*')->count(), 0);
         $this->assertEquals(Restaurant::elasticsearch()->count(), 0);
 
         // The documents wont become available until searchable() hits.
         $restaurant->searchable();
 
-        $this->assertEquals(Restaurant::search('*')->count(), 1);
         $this->assertEquals(Restaurant::elasticsearch()->count(), 1);
     }
 
@@ -35,13 +33,11 @@ class RefreshOnSaveTest extends TestCase
         $restaurant->getIndex()->sync();
         $restaurant->save();
 
-        $this->assertEquals(Restaurant::search('*')->count(), 0);
         $this->assertEquals(Restaurant::elasticsearch()->count(), 0);
 
         // The documents will stay hidden even if searchable() hits.
         $restaurant->searchable();
 
-        $this->assertEquals(Restaurant::search('*')->count(), 0);
         $this->assertEquals(Restaurant::elasticsearch()->count(), 0);
     }
 
@@ -54,13 +50,11 @@ class RefreshOnSaveTest extends TestCase
         $restaurant->getIndex()->sync();
         $restaurant->save();
 
-        $this->assertEquals(Restaurant::search('*')->count(), 0);
         $this->assertEquals(Restaurant::elasticsearch()->count(), 0);
 
         // Hitting searchable will make them available for search.
         $restaurant->searchable();
 
-        $this->assertEquals(Restaurant::search('*')->count(), 1);
         $this->assertEquals(Restaurant::elasticsearch()->count(), 1);
     }
 }
