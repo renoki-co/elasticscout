@@ -13,6 +13,7 @@ class QueryTest extends TestCase
         $book = factory(Book::class)->make(['name' => 'Sun Tzu: Art of War']);
         $book->getIndex()->sync();
         $book->save();
+        $book->searchable();
 
         $searchResult = Book::search($book->name)->first();
 
@@ -24,6 +25,7 @@ class QueryTest extends TestCase
         $book = factory(Book::class)->make(['name' => 'Rumpelstiltskin']);
         $book->getIndex()->sync();
         $book->save();
+        $book->searchable();
 
         $this->assertNull(
             Book::search('Rumpelstil')->first()
@@ -35,6 +37,7 @@ class QueryTest extends TestCase
         $restaurant = factory(Restaurant::class)->make(['name' => 'Dominos']);
         $restaurant->getIndex()->sync();
         $restaurant->save();
+        $restaurant->searchable();
 
         $searchResult = Restaurant::search('Domin')->first();
 
