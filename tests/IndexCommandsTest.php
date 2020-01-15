@@ -24,7 +24,7 @@ class IndexCommandsTest extends TestCase
 
     public function test_delete_index_command()
     {
-        $restaurant = factory(Restaurant::class)->create();
+        $restaurant = factory(Restaurant::class)->make();
         $index = $restaurant->getIndex();
 
         $this->assertTrue($index->create());

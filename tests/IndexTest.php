@@ -9,7 +9,7 @@ class IndexTest extends TestCase
 {
     public function test_create_index()
     {
-        $restaurant = factory(Restaurant::class)->create();
+        $restaurant = factory(Restaurant::class)->make();
         $index = $restaurant->getIndex();
 
         $this->assertFalse($index->exists());
@@ -23,7 +23,7 @@ class IndexTest extends TestCase
 
     public function test_create_only_alias_index()
     {
-        $restaurant = factory(Restaurant::class)->create();
+        $restaurant = factory(Restaurant::class)->make();
         $index = $restaurant->getIndex();
 
         $this->assertFalse($index->exists());
@@ -37,7 +37,7 @@ class IndexTest extends TestCase
 
     public function test_delete_index()
     {
-        $restaurant = factory(Restaurant::class)->create();
+        $restaurant = factory(Restaurant::class)->make();
         $index = $restaurant->getIndex();
 
         $this->assertTrue($index->create());
@@ -53,7 +53,7 @@ class IndexTest extends TestCase
 
     public function test_sync_on_new_index()
     {
-        $restaurant = factory(Restaurant::class)->create();
+        $restaurant = factory(Restaurant::class)->make();
         $index = $restaurant->getIndex();
 
         $this->assertFalse($index->exists());
@@ -72,7 +72,7 @@ class IndexTest extends TestCase
 
     public function test_sync_without_existence()
     {
-        $restaurant = factory(Restaurant::class)->create();
+        $restaurant = factory(Restaurant::class)->make();
         $index = $restaurant->getIndex();
 
         $this->assertFalse($index->exists());
@@ -86,7 +86,7 @@ class IndexTest extends TestCase
 
     public function test_sync_mapping_without_mapping()
     {
-        $post = factory(Post::class)->create();
+        $post = factory(Post::class)->make();
         $index = $post->getIndex();
 
         $this->assertFalse($index->exists());
@@ -100,7 +100,7 @@ class IndexTest extends TestCase
 
     public function test_sync_mapping_with_mapping()
     {
-        $restaurant = factory(Restaurant::class)->create();
+        $restaurant = factory(Restaurant::class)->make();
         $index = $restaurant->getIndex();
 
         $this->assertFalse($index->exists());
