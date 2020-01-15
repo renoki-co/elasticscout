@@ -43,5 +43,5 @@ return [
      * Recommended for production: false
      * Recommended for local/testing: true
      */
-    'refresh_document_on_save' => env('SCOUT_ELASTICSEARCH_REFRESH_ON_SAVE', false),
+    'refresh_document_on_save' => env('SCOUT_ELASTICSEARCH_REFRESH_ON_SAVE', true),
 ];
