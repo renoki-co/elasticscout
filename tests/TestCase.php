@@ -2,7 +2,6 @@
 
 namespace Rennokki\ElasticScout\Tests;
 
-use Exception;
 use Laravel\Scout\ScoutServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Rennokki\ElasticScout\ElasticScoutServiceProvider;

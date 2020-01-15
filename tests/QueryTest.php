@@ -3,7 +3,6 @@
 namespace Rennokki\ElasticScout\Tests;
 
 use Rennokki\ElasticScout\Tests\Models\Book;
-use Rennokki\ElasticScout\Tests\Models\Post;
 use Rennokki\ElasticScout\Tests\Models\Restaurant;
 
 class QueryTest extends TestCase
