@@ -1,0 +1,45 @@
+{
+    "name": "rennokki/elasticscout",
+    "type": "library",
+    "description": "Elasticsearch driver for Laravel Scout.",
+    "keywords": [
+        "elastic", "elasticsearch", "driver", "engine", "laravel", "scout", "search"
+    ],
+    "homepage": "https://github.com/rennokki/elasticscout",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alex Renoki",
+            "email": "rennokki@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.2",
+        "elasticsearch/elasticsearch": "7.1.*",
+        "laravel/scout": "^7.2",
+        "aws/aws-sdk-php": "^3.132"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.0",
+        "orchestra/testbench": "~4.2.0",
+        "orchestra/database": "~4.2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Rennokki\\ElasticScout\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Rennokki\\ElasticScout\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Rennokki\\ElasticScout\\ElasticScoutServiceProvider"
+            ]
+        }
+    }
+}

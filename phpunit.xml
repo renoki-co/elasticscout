@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="vendor/autoload.php"
+         backupGlobals="false"
+         backupStaticAttributes="false"
+         colors="true"
+         verbose="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="false">
+    <testsuites>
+        <testsuite name="Rennokki Test Suite">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">src/</directory>
+        </whitelist>
+    </filter>
+    <php>
+        <server name="SCOUT_DRIVER" value="elasticscout" />
+        <server name="SCOUT_PREFIX" value="test" />
+        <server name="SCOUT_QUEUE_CONNECTION" value="sync" />
+        <server name="SCOUT_ELASTICSEARCH_HOST" value="127.0.0.1" />
+        <server name="SCOUT_ELASTICSEARCH_PORT" value="9200" />
+    </php>
+</phpunit>
