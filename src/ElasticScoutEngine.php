@@ -329,22 +329,6 @@ class ElasticScoutEngine extends Engine
     }
 
     /**
-     * Make a raw search.
-     *
-     * @param  \Illuminate\Database\Eloquent\Model  $model
-     * @param  array  $query
-     * @return mixed
-     */
-    public function searchRaw(Model $model, $query)
-    {
-        $payload = (new TypePayload($model))
-            ->setIfNotEmpty('body', $query)
-            ->get();
-
-        return ElasticClient::search($payload);
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function mapIds($results)

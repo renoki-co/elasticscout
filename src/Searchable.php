@@ -110,21 +110,6 @@ trait Searchable
     }
 
     /**
-     * Execute a raw search.
-     *
-     * @param  array  $query
-     * @return array
-     */
-    public static function searchRaw(array $query)
-    {
-        $model = new static();
-
-        return $model
-            ->searchableUsing()
-            ->searchRaw($model, $query);
-    }
-
-    /**
      * Set the highlight attribute.
      *
      * @param  \Rennokki\ElasticScout\Highlight $value
