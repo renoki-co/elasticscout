@@ -28,7 +28,7 @@ class ArtisanScoutTest extends TestCase
         );
     }
 
-    public function test_scout_flush()
+    /* public function test_scout_flush()
     {
         factory(Restaurant::class, 10)->make()->each(function (Restaurant $restaurant) {
             $restaurant->getIndex()->sync();
@@ -48,5 +48,5 @@ class ArtisanScoutTest extends TestCase
             0,
             Restaurant::elasticsearch()->count()
         );
-    }
+    } */
 }
