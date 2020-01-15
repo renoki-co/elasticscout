@@ -9,7 +9,8 @@ class ArtisanScoutTest extends TestCase
 {
     public function test_scout_import()
     {
-        factory(Restaurant::class, 10)->create();
+        $restaurants = factory(Restaurant::class, 10)->make();
+        $restaurants->first()->getIndex()->sync();
 
         Restaurant::removeAllFromSearch();
 
@@ -29,7 +30,11 @@ class ArtisanScoutTest extends TestCase
 
     public function test_scout_flush()
     {
-        factory(Restaurant::class, 10)->create();
+        factory(Restaurant::class, 10)->make()->each(function (Restaurant $restaurant) {
+            $restaurant->getIndex()->sync();
+            $restaurant->save();
+            $restaurant->searchable();
+        });
 
         $this->assertEquals(10, Restaurant::elasticsearch()->count());
 
