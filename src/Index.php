@@ -386,10 +386,10 @@ abstract class Index
                 ->putSettings($payload);
 
             ElasticClient::indices()
-                ->close($this->getPayload());
+                ->open($this->getPayload());
         } catch (Exception $e) {
             ElasticClient::indices()
-                ->close($this->getPayload());
+                ->open($this->getPayload());
 
             return false;
         }
