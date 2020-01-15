@@ -92,8 +92,8 @@ abstract class TestCase extends Orchestra
                 ],
             ],
             'indexer' => env('SCOUT_ELASTICSEARCH_INDEXER', 'simple'),
-            'update_mapping_on_save' => env('SCOUT_ELASTICSEARCH_UPDATE_MAPPING_ON_SAVE', true),
-            'refresh_document_on_save' => env('SCOUT_ELASTICSEARCH_REFRESH_ON_SAVE', false),
+            'sync_mapping_on_save' => env('SCOUT_ELASTICSEARCH_SYNC_MAPPING_ON_SAVE', true),
+            'refresh_document_on_save' => env('SCOUT_ELASTICSEARCH_REFRESH_DOCUMENT_ON_SAVE', false),
         ]);
 
         $app['config']->set('scout', [

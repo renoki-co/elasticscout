@@ -28,7 +28,7 @@ class ElasticScoutEngine extends Engine
      *
      * @var bool
      */
-    protected $updateMapping;
+    protected $syncMappingOnSave;
 
     /**
      * The updated mappings.
@@ -41,13 +41,13 @@ class ElasticScoutEngine extends Engine
      * ElasticScoutEngine constructor.
      *
      * @param  \Rennokki\ElasticScout\Indexers\Indexer  $indexer
-     * @param  bool  $updateMapping
+     * @param  bool  $syncMappingOnSave
      * @return void
      */
-    public function __construct(Indexer $indexer, $updateMapping)
+    public function __construct(Indexer $indexer, $syncMappingOnSave)
     {
         $this->indexer = $indexer;
-        $this->updateMapping = $updateMapping;
+        $this->syncMappingOnSave = $syncMappingOnSave;
     }
 
     /**
@@ -55,7 +55,7 @@ class ElasticScoutEngine extends Engine
      */
     public function update($models)
     {
-        if ($this->updateMapping) {
+        if ($this->syncMappingOnSave) {
             $self = $this;
 
             $models->each(function ($model) use ($self) {

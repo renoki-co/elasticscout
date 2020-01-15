@@ -36,7 +36,7 @@ class ElasticScoutServiceProvider extends ServiceProvider
             ->make(EngineManager::class)
             ->extend('elasticscout', function () {
                 $indexerType = config('elasticscout.indexer', 'simple');
-                $updateMapping = config('elasticscout.update_mapping_on_save', true);
+                $syncMappingOnSave = config('elasticscout.sync_mapping_on_save', true);
                 $indexerClass = '\\Rennokki\\ElasticScout\\Indexers\\'.ucfirst($indexerType).'Indexer';
 
                 if (! class_exists($indexerClass)) {
@@ -46,7 +46,7 @@ class ElasticScoutServiceProvider extends ServiceProvider
                     ));
                 }
 
-                return new ElasticScoutEngine(new $indexerClass(), $updateMapping);
+                return new ElasticScoutEngine(new $indexerClass(), $syncMappingOnSave);
             });
 
         $this->commands([
