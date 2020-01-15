@@ -429,6 +429,17 @@ class NameRule extends SearchRule
             ],
         ];
     }
+
+    public function buildQueryPayload(SearchQueryBuilder $builder)
+    {
+        return [
+            'should' => [
+                'match' => [
+                    'name' => $builder->query,
+                ],
+            ],
+        ];
+    }
 }
 ```
 
