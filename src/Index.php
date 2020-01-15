@@ -250,7 +250,7 @@ abstract class Index
         }
 
         if (! $this->exists()) {
-            $this->create();
+            $this->sync();
         }
 
         ElasticClient::indices()
@@ -337,7 +337,7 @@ abstract class Index
         }
 
         if (! $this->exists()) {
-            $this->create();
+            $this->sync();
         }
 
         $payload =
