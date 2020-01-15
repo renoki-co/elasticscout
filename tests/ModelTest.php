@@ -14,8 +14,6 @@ class ModelTest extends TestCase
         $restaurant->getIndex()->sync();
         $restaurant->save();
 
-        sleep(2);
-
         $this->assertEquals(Restaurant::search('*')->count(), 1);
         $this->assertEquals(Restaurant::elasticsearch()->count(), 1);
     }
@@ -29,8 +27,6 @@ class ModelTest extends TestCase
         $restaurant->getIndex()->sync();
         $restaurant->save();
 
-        sleep(2);
-
         $this->assertEquals(Restaurant::search('*')->count(), 0);
         $this->assertEquals(Restaurant::elasticsearch()->count(), 0);
     }
@@ -43,8 +39,6 @@ class ModelTest extends TestCase
 
         $restaurant->getIndex()->sync();
         $restaurant->save();
-
-        sleep(2);
 
         $this->assertEquals(Restaurant::search('*')->count(), 0);
         $this->assertEquals(Restaurant::elasticsearch()->count(), 0);
