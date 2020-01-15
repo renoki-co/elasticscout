@@ -20,7 +20,7 @@ class MultipleIndexer implements Indexer
 
         $payload = new TypePayload($model);
 
-        if (in_array(Migratable::class, class_uses_recursive($index))) {
+        if ($index->isMigratable()) {
             $payload->useAlias('write');
         }
 

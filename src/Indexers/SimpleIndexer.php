@@ -33,7 +33,7 @@ class SimpleIndexer implements Indexer
             $payload = (new DocumentPayload($model))
                 ->set('body', $modelData);
 
-            if (in_array(Migratable::class, class_uses_recursive($index))) {
+            if ($index->isMigratable()) {
                 $payload->useAlias('write');
             }
 
