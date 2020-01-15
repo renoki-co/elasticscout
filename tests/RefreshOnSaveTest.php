@@ -5,7 +5,7 @@ namespace Rennokki\ElasticScout\Tests;
 use Rennokki\ElasticScout\Tests\Models\Post;
 use Rennokki\ElasticScout\Tests\Models\Restaurant;
 
-class ModelTest extends TestCase
+class RefreshOnSaveTest extends TestCase
 {
     public function test_model_gets_indexed_with_refresh_on_save_on()
     {
