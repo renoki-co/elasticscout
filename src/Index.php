@@ -288,14 +288,14 @@ abstract class Index
     public function sync(): bool
     {
         if (! $this->exists()) {
-            return $this->create();
+            $this->create();
         }
 
         // Sync the Settings
         $this->syncSettings();
 
         // Sync the Mapping
-            $this->syncMapping();
+        $this->syncMapping();
 
         // If the index is migratable, also
         // sync its alias to the cluster.
