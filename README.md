@@ -411,7 +411,28 @@ class NameRule extends SearchRule
 }
 ```
 
-To apply the rule, you can call the `->rule()` method at query runtime:
+To apply by default on all search queries, define a `getElasticScoutSearchRules()` method in your model:
+
+```php
+use App\SearchRules\NameRule;
+
+class Restaurant extends Model
+{
+    /**
+     * Get the search rules for Elasticsearch.
+     *
+     * @return array
+     */
+    public function getElasticScoutSearchRules(): array
+    {
+        return [
+            new NameRule,
+        ];
+    }
+}
+```
+
+To apply the rule at the query level, you can call the `->rule()` method:
 
 ```php
 use App\SearchRules\NameRule;
