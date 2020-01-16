@@ -195,23 +195,19 @@ class ElasticScoutEngine extends Engine
     protected function initializeSearchQueryPayloadBuilder(Builder $builder, array $options = [])
     {
         $payloadCollection = collect();
-        $searchRules = $builder->rules ?: $builder->model->getElasticScoutSearchRules();
+        $searchRules = $builder->searchRules ?: $builder->model->getElasticScoutSearchRules();
 
-        foreach ($searchRules as $rule) {
+        foreach ($searchRules as $searchRule) {
             $payload = new TypePayload($builder->model);
 
-            if (is_callable($rule)) {
-                $payload->setIfNotEmpty('body.query.bool', call_user_func($rule, $builder));
-            } else {
-                if ($rule->isApplicable()) {
-                    $payload->setIfNotEmpty('body.query.bool', $rule->buildQueryPayload($builder));
+            if (! $searchRule->isApplicable()) {
+                continue;
+            }
 
-                    if ($options['highlight'] ?? true) {
-                        $payload->setIfNotEmpty('body.highlight', $rule->buildHighlightPayload($builder));
-                    }
-                } else {
-                    continue;
-                }
+            $payload->setIfNotEmpty('body.query.bool', $searchRule->buildQueryPayload($builder));
+
+            if ($options['highlight'] ?? true) {
+                $payload->setIfNotEmpty('body.highlight', $searchRule->buildHighlightPayload($builder));
             }
 
             $payloadCollection->push($payload);

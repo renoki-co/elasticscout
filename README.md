@@ -433,14 +433,34 @@ class Restaurant extends Model
 }
 ```
 
-To apply the rule at the query level, you can call the `->rule()` method:
+To apply the rule at the query level, you can call the `->addRule()` method:
 
 ```php
 use App\SearchRules\NameRule;
 
 Restaurant::search('Dominos')
-    ->rule(new NameRule)
+    ->addRule(new NameRule)
     ->get();
+```
+
+You can add multiple rules or set the rules to a specific value:
+
+```php
+use App\SearchRules\NameRule;
+use App\SearchRules\LocationRule;
+
+Restaurant::search('Dominos')
+    ->addRules([
+        new NameRule,
+        new LocationRule($lat, $lon),
+    ])->get();
+
+// The rule that will be aplied will be only LocationRule
+Restaurant::search('Dominos')
+    ->addRule(new NameRule)
+    ->setRules([
+        new LocationRule($lat, $lon),
+    ])->get();
 ```
 
 ### Highlight Payload
@@ -479,7 +499,7 @@ To access the payload, you can use the `$highlight` attribute from the model (or
 ```php
 use App\SearchRules\NameRule;
 
-$restaurant = Restaurant::search('Dominos')->rule(new NameRule)->first();
+$restaurant = Restaurant::search('Dominos')->addRule(new NameRule)->first();
 
 $name = $restaurant->highlight->name;
 $nameAsString = $restaurant->highlight->nameAsString;
@@ -513,7 +533,7 @@ class NameRule extends SearchRule
 }
 
 Restaurant::search('Dominos')
-    ->rule(new NameRule('Pizza Hut'))
+    ->addRule(new NameRule('Pizza Hut'))
     ->get();
 ```
 
