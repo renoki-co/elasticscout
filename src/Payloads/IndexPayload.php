@@ -39,25 +39,15 @@ class IndexPayload extends RawPayload
     }
 
     /**
-     * Use an alias.
+     * Use an alias on the payload.
      *
      * @param  string  $alias
      * @return $this
      * @throws \Exception
      */
-    public function useAlias($alias)
+    public function withAlias(string $alias)
     {
-        $aliasGetter = 'get'.ucfirst($alias).'Alias';
-
-        if (! method_exists($this->index, $aliasGetter)) {
-            throw new Exception(sprintf(
-                'The index %s doesn\'t have getter for the %s alias.',
-                get_class($this->index),
-                $alias
-            ));
-        }
-
-        $this->payload['index'] = call_user_func([$this->index, $aliasGetter]);
+        $this->payload['index'] = $this->index->getMigratableAlias($alias);
 
         return $this;
     }

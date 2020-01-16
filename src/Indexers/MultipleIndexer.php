@@ -20,7 +20,7 @@ class MultipleIndexer implements Indexer
         $payload = new TypePayload($model);
 
         if ($index->isMigratable()) {
-            $payload->useAlias('write');
+            $payload->withAlias('write');
         }
 
         if ($documentRefresh = config('elasticscout.refresh_document_on_save')) {

@@ -33,7 +33,7 @@ class SimpleIndexer implements Indexer
                 ->set('body', $modelData);
 
             if ($index->isMigratable()) {
-                $payload->useAlias('write');
+                $payload->withAlias('write');
             }
 
             if ($documentRefresh = config('elasticscout.refresh_document_on_save')) {

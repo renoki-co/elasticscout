@@ -5,12 +5,13 @@ namespace Rennokki\ElasticScout;
 trait Migratable
 {
     /**
-     * Get the write alias.
+     * Get the migratable alias.
      *
+     * @param  string  $alias
      * @return string
      */
-    public function getWriteAlias()
+    public function getMigratableAlias(string $alias)
     {
-        return $this->getName().'_write';
+        return "{$this->getName()}_{$alias}";
     }
 }

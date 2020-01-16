@@ -128,7 +128,7 @@ abstract class Index
         $payload = new IndexPayload($this);
 
         if ($withAlias) {
-            $payload = $payload->set('name', $this->getWriteAlias());
+            $payload = $payload->set('name', $this->getMigratableAlias('write'));
         }
 
         return $payload;
@@ -330,7 +330,7 @@ abstract class Index
                 ->set('include_type_name', 'true');
 
         if ($this->isMigratable()) {
-            $payload = $payload->useAlias('write');
+            $payload = $payload->withAlias('write');
         }
 
         ElasticClient::indices()
