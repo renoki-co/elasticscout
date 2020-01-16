@@ -2,7 +2,6 @@
 
 namespace Rennokki\ElasticScout\Payloads;
 
-use Exception;
 use Rennokki\ElasticScout\Index;
 use Rennokki\ElasticScout\Payloads\Features\HasProtectedKeys;
 
@@ -43,7 +42,6 @@ class IndexPayload extends RawPayload
      *
      * @param  string  $alias
      * @return $this
-     * @throws \Exception
      */
     public function withAlias(string $alias)
     {
