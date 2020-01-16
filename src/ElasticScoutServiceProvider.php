@@ -15,7 +15,6 @@ use Laravel\Scout\EngineManager;
 use Rennokki\ElasticScout\Console\DeleteIndexCommand;
 use Rennokki\ElasticScout\Console\MakeIndexCommand;
 use Rennokki\ElasticScout\Console\MakeRuleCommand;
-use Rennokki\ElasticScout\Console\MigrateIndexCommand;
 use Rennokki\ElasticScout\Console\SyncIndexCommand;
 
 class ElasticScoutServiceProvider extends ServiceProvider
@@ -51,7 +50,6 @@ class ElasticScoutServiceProvider extends ServiceProvider
         $this->commands([
             SyncIndexCommand::class,
             DeleteIndexCommand::class,
-            MigrateIndexCommand::class,
 
             MakeIndexCommand::class,
             MakeRuleCommand::class,

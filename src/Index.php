@@ -101,7 +101,7 @@ abstract class Index
      *
      * @return array
      */
-    public function getMapping()
+    public function getMapping(): array
     {
         $mapping = $this->mapping;
 

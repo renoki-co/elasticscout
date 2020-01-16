@@ -55,8 +55,9 @@ trait Searchable
     {
         if (! $this instanceof HasElasticScoutIndex) {
             throw new Exception(sprintf(
-                'The model %s does not implement the interface.',
-                __CLASS__
+                'The model %s does not implement the $s interface.',
+                __CLASS__,
+                HasElasticScoutIndex::class
             ));
         }
 
@@ -76,10 +77,11 @@ trait Searchable
      *
      * @return array
      */
-    public function getSearchRules()
+    public function getElasticScoutSearchRules(): array
     {
-        return isset($this->searchRules) && count($this->searchRules) > 0 ?
-            $this->searchRules : [new SearchRule];
+        return [
+            new SearchRule,
+        ];
     }
 
     /**

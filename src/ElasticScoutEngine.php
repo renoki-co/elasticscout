@@ -195,7 +195,7 @@ class ElasticScoutEngine extends Engine
     protected function initializeSearchQueryPayloadBuilder(Builder $builder, array $options = [])
     {
         $payloadCollection = collect();
-        $searchRules = $builder->rules ?: $builder->model->getSearchRules();
+        $searchRules = $builder->rules ?: $builder->model->getElasticScoutSearchRules();
 
         foreach ($searchRules as $rule) {
             $payload = new TypePayload($builder->model);
