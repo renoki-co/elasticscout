@@ -146,7 +146,7 @@ class PostIndex extends Index
 ```
 
 ### Attach the index to a model
-All the models that can be searched into should use the `Rennokki\ElasticScout\Searchable` trait and implement the `HasElasticScoutIndex` interface:
+All the models that can be searched into should use the `Rennokki\ElasticScout\Searchable` trait and implement the `Rennokki\ElasticScout\Index\HasElasticScoutIndex` interface:
 
 ```php
 use Rennokki\ElasticScout\Contracts\HasElasticScoutIndex;
@@ -332,7 +332,8 @@ Restaurant::whereGeoShape(
 
 Rules
 -----
-A search rule is a class that can be used on multiple queries, helping you to define custom payload only once.
+A search rule is a class that can be used on multiple queries, helping you to define custom payload only once. This works only for the Search Query builder.
+
 To create a rule, use the artisan command:
 
 ```bash
