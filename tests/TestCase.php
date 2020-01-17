@@ -82,7 +82,7 @@ abstract class TestCase extends Orchestra
                     ],
                 ],
             ],
-            'indexer' => getenv('SCOUT_ELASTICSEARCH_INDEXER') ?: env('SCOUT_ELASTICSEARCH_INDEXER', \Rennokki\ElasticScout\Indexers\SimpleIndexer::class),
+            'indexer' => getenv('SCOUT_ELASTICSEARCH_INDEXER_CLASS') ?: env('SCOUT_ELASTICSEARCH_INDEXER_CLASS', \Rennokki\ElasticScout\Indexers\SimpleIndexer::class),
             'sync_mapping_on_save' => env('SCOUT_ELASTICSEARCH_SYNC_MAPPING_ON_SAVE', true),
             'refresh_document_on_save' => env('SCOUT_ELASTICSEARCH_REFRESH_DOCUMENT_ON_SAVE', false),
         ]);
