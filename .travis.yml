@@ -8,8 +8,11 @@ php:
   - 7.4
 
 env:
-  matrix:
+  global:
     - ES_VERSION="7.1.1"
+  matrix:
+    - SCOUT_ELASTICSEARCH_INDEXER_CLASS="\Rennokki\ElasticScout\Indexers\SimpleIndexer"
+    - SCOUT_ELASTICSEARCH_INDEXER_CLASS="\Rennokki\ElasticScout\Indexers\MultipleIndexer"
 
 cache:
   directories:
