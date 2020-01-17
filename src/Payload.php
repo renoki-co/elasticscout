@@ -3,7 +3,6 @@
 namespace Rennokki\ElasticScout;
 
 use Illuminate\Database\Eloquent\Model;
-use Rennokki\ElasticScout\Index;
 use Rennokki\ElasticScout\Payloads\DocumentPayload;
 use Rennokki\ElasticScout\Payloads\IndexPayload;
 use Rennokki\ElasticScout\Payloads\RawPayload;
