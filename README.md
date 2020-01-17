@@ -501,8 +501,8 @@ use App\SearchRules\NameRule;
 
 $restaurant = Restaurant::search('Dominos')->addRule(new NameRule)->first();
 
-$name = $restaurant->highlight->name;
-$nameAsString = $restaurant->highlight->nameAsString;
+$name = $restaurant->elasticsearch_highlights->name;
+$nameAsString = $restaurant->elasticsearch_highlights->nameAsString;
 ```
 
 **In case you need to pass arguments to the rules, you can do so by adding your construct method.**

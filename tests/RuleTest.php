@@ -22,7 +22,7 @@ class RuleTest extends TestCase
 
         $this->assertEquals(
             '<em>How</em> to breathe',
-            $searchResult->highlight->nameAsString
+            $searchResult->elasticsearch_highlights->nameAsString
         );
     }
 

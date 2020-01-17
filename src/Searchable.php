@@ -20,7 +20,7 @@ trait Searchable
      *
      * @var \Rennokki\ElasticScout\Highlight|null
      */
-    private $highlight = null;
+    private $elasticsearchHighlights = null;
 
     /**
      * Defines if the model is searchable.
@@ -117,9 +117,9 @@ trait Searchable
      * @param  \Rennokki\ElasticScout\Highlight  $highlight
      * @return void
      */
-    public function setHighlightAttribute(Highlight $highlight)
+    public function setElasticsearchHighlightsAttribute(Highlight $highlight)
     {
-        $this->highlight = $highlight;
+        $this->elasticsearchHighlights = $highlight;
     }
 
     /**
@@ -127,9 +127,9 @@ trait Searchable
      *
      * @return \Rennokki\ElasticScout\Highlight|null
      */
-    public function getHighlightAttribute()
+    public function getElasticsearchHighlightsAttribute()
     {
-        return $this->highlight;
+        return $this->elasticsearchHighlights;
     }
 
     /**

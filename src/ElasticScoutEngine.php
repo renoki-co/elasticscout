@@ -372,7 +372,7 @@ class ElasticScoutEngine extends Engine
                     $model = $models[$id];
 
                     if (isset($hit['highlight'])) {
-                        $model->highlight = new Highlight($hit['highlight']);
+                        $model->elasticsearch_highlights = new Highlight($hit['highlight']);
                     }
 
                     return $model;
