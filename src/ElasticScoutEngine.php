@@ -8,7 +8,8 @@ use Laravel\Scout\Builder;
 use Laravel\Scout\Engines\Engine;
 use Rennokki\ElasticScout\Builders\SearchQueryBuilder;
 use Rennokki\ElasticScout\Facades\ElasticClient;
-use Rennokki\ElasticScout\Indexers\Indexer;
+use Rennokki\ElasticScout\Contracts\Indexer;
+use Rennokki\ElasticScout\Payload;
 use Rennokki\ElasticScout\Payloads\TypePayload;
 use stdClass;
 
@@ -17,7 +18,7 @@ class ElasticScoutEngine extends Engine
     /**
      * The indexer interface.
      *
-     * @var \Rennokki\ElasticScout\Indexers\Indexer
+     * @var \Rennokki\ElasticScout\Contracts\Indexer
      */
     protected $indexer;
 
@@ -38,7 +39,7 @@ class ElasticScoutEngine extends Engine
     /**
      * ElasticScoutEngine constructor.
      *
-     * @param  \Rennokki\ElasticScout\Indexers\Indexer  $indexer
+     * @param  \Rennokki\ElasticScout\Contracts\Indexer  $indexer
      * @param  bool  $syncMappingOnSave
      * @return void
      */
@@ -174,11 +175,11 @@ class ElasticScoutEngine extends Engine
     {
         $payloadCollection = collect();
 
-        $payload = (new TypePayload($builder->model))
-                ->setIfNotEmpty(
-                    'body.query.bool.must.match_all',
-                    new stdClass()
-                );
+        $payload = Payload::type($builder->model)
+            ->setIfNotEmpty(
+                'body.query.bool.must.match_all',
+                new stdClass()
+            );
 
         $payloadCollection->push($payload);
 
@@ -198,16 +199,22 @@ class ElasticScoutEngine extends Engine
         $searchRules = $builder->searchRules ?: $builder->model->getElasticScoutSearchRules();
 
         foreach ($searchRules as $searchRule) {
-            $payload = new TypePayload($builder->model);
+            $payload = Payload::type($builder->model);
 
             if (! $searchRule->isApplicable()) {
                 continue;
             }
 
-            $payload->setIfNotEmpty('body.query.bool', $searchRule->buildQueryPayload($builder));
+            $payload->setIfNotEmpty(
+                'body.query.bool',
+                $searchRule->buildQueryPayload($builder)
+            );
 
             if ($options['highlight'] ?? true) {
-                $payload->setIfNotEmpty('body.highlight', $searchRule->buildHighlightPayload($builder));
+                $payload->setIfNotEmpty(
+                    'body.highlight',
+                    $searchRule->buildHighlightPayload($builder)
+                );
             }
 
             $payloadCollection->push($payload);

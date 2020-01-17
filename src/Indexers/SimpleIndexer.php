@@ -3,8 +3,9 @@
 namespace Rennokki\ElasticScout\Indexers;
 
 use Illuminate\Database\Eloquent\Collection;
+use Rennokki\ElasticScout\Contracts\Indexer;
 use Rennokki\ElasticScout\Facades\ElasticClient;
-use Rennokki\ElasticScout\Payloads\DocumentPayload;
+use Rennokki\ElasticScout\Payload;
 
 class SimpleIndexer implements Indexer
 {
@@ -29,7 +30,7 @@ class SimpleIndexer implements Indexer
 
             $index = $model->getIndex();
 
-            $payload = (new DocumentPayload($model))
+            $payload = Payload::document($model)
                 ->set('body', $modelData);
 
             if ($index->isMigratable()) {
@@ -50,7 +51,7 @@ class SimpleIndexer implements Indexer
     public function delete(Collection $models)
     {
         $models->each(function ($model) {
-            $payload = (new DocumentPayload($model))
+            $payload = Payload::document($model)
                 ->set('client.ignore', 404)
                 ->get();
 

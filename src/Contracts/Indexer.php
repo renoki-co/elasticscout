@@ -1,6 +1,6 @@
 <?php
 
-namespace Rennokki\ElasticScout\Indexers;
+namespace Rennokki\ElasticScout\Contracts;
 
 use Illuminate\Database\Eloquent\Collection;
 
