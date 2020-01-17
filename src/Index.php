@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Rennokki\ElasticScout\Facades\ElasticClient;
-use Rennokki\ElasticScout\Payload;
 use Rennokki\ElasticScout\Payloads\IndexPayload;
 use Rennokki\ElasticScout\Payloads\TypePayload;
 

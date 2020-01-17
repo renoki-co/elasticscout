@@ -7,9 +7,8 @@ use Illuminate\Support\Arr;
 use Laravel\Scout\Builder;
 use Laravel\Scout\Engines\Engine;
 use Rennokki\ElasticScout\Builders\SearchQueryBuilder;
-use Rennokki\ElasticScout\Facades\ElasticClient;
 use Rennokki\ElasticScout\Contracts\Indexer;
-use Rennokki\ElasticScout\Payload;
+use Rennokki\ElasticScout\Facades\ElasticClient;
 use Rennokki\ElasticScout\Payloads\TypePayload;
 use stdClass;
 
