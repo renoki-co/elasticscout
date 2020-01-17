@@ -19,8 +19,8 @@ class TypePayload extends IndexPayload
      * TypePayload constructor.
      *
      * @param  \Illuminate\Database\Eloquent\Model  $model
-     * @throws \Exception
      * @return void
+     * @throws \Exception
      */
     public function __construct(Model $model)
     {
@@ -32,10 +32,9 @@ class TypePayload extends IndexPayload
             ));
         }
 
-        $this->model = $model;
-
         parent::__construct($model->getIndex());
 
+        $this->model = $model;
         $this->payload['type'] = $model->searchableAs();
         $this->protectedKeys[] = 'type';
     }
