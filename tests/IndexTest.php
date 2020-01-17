@@ -24,7 +24,7 @@ class IndexTest extends TestCase
         $this->assertTrue($index->hasAlias());
 
         $this->assertEquals([], $index->getRawMapping());
-        $this->assertEquals([], $index->getRawSettings()['analysis'] ?? []);
+        $this->assertEquals($index->getSettings()['analysis'], $index->getRawSettings()['analysis']);
     }
 
     public function test_create_alias_on_inexistent_index_should_sync_the_index_and_put_alias()
