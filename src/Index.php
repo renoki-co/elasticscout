@@ -212,7 +212,7 @@ abstract class Index
                 ->get();
 
         ElasticClient::indices()
-            ->create($this->getPayload());
+            ->create($payload);
 
         // If the index is migratable, it means it has to have an alias
         // in case of a migration might occur in the near future.
