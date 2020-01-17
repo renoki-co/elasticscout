@@ -13,6 +13,7 @@ trait Searchable
     use SourceSearchable {
         SourceSearchable::bootSearchable as sourceBootSearchable;
         SourceSearchable::getScoutKeyName as sourceGetScoutKeyName;
+        SourceSearchable::getScoutKey as sourceGetScoutKey;
     }
 
     /**
@@ -140,5 +141,15 @@ trait Searchable
     public function getScoutKeyName()
     {
         return $this->getKeyName();
+    }
+
+    /**
+     * Get the value used to index the model.
+     *
+     * @return mixed
+     */
+    public function getScoutKey()
+    {
+        return $this->getKey();
     }
 }
