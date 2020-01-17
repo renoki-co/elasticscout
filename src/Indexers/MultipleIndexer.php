@@ -3,9 +3,9 @@
 namespace Rennokki\ElasticScout\Indexers;
 
 use Illuminate\Database\Eloquent\Collection;
+use Rennokki\ElasticScout\Contracts\Indexer;
 use Rennokki\ElasticScout\Facades\ElasticClient;
-use Rennokki\ElasticScout\Payloads\RawPayload;
-use Rennokki\ElasticScout\Payloads\TypePayload;
+use Rennokki\ElasticScout\Payload;
 
 class MultipleIndexer implements Indexer
 {
@@ -17,10 +17,10 @@ class MultipleIndexer implements Indexer
         $model = $models->first();
         $index = $model->getIndex();
 
-        $payload = new TypePayload($model);
+        $payload = Payload::type($model);
 
         if ($index->isMigratable()) {
-            $payload->useAlias('write');
+            $payload->withAlias('write');
         }
 
         if ($documentRefresh = config('elasticscout.refresh_document_on_save')) {
@@ -41,7 +41,7 @@ class MultipleIndexer implements Indexer
                 return true;
             }
 
-            $actionPayload = (new RawPayload())
+            $actionPayload = Payload::raw()
                 ->set('index._id', $model->getScoutKey());
 
             $payload
@@ -59,10 +59,10 @@ class MultipleIndexer implements Indexer
     {
         $model = $models->first();
 
-        $payload = new TypePayload($model);
+        $payload = Payload::type($model);
 
         $models->each(function ($model) use ($payload) {
-            $actionPayload = (new RawPayload())
+            $actionPayload = Payload::raw()
                 ->set('delete._id', $model->getScoutKey());
 
             $payload->add('body', $actionPayload->get());

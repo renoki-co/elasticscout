@@ -3,6 +3,7 @@
 namespace Rennokki\ElasticScout\Builders;
 
 use Illuminate\Database\Eloquent\Model;
+use Rennokki\ElasticScout\SearchRule;
 
 class SearchQueryBuilder extends ElasticsearchBuilder
 {
@@ -11,7 +12,7 @@ class SearchQueryBuilder extends ElasticsearchBuilder
      *
      * @var array
      */
-    public $rules = [];
+    public $searchRules = [];
 
     /**
      * SearchQueryBuilder constructor.
@@ -30,14 +31,46 @@ class SearchQueryBuilder extends ElasticsearchBuilder
     }
 
     /**
-     * Add a rule.
+     * Add a new rule to the builder.
      *
-     * @param  string|callable  $rule
+     * @param  \Rennokki\ElasticScout\SearchRule  $searchRule
      * @return $this
      */
-    public function rule($rule)
+    public function addRule(SearchRule $searchRule)
     {
-        $this->rules[] = $rule;
+        $this->searchRules[] = $searchRule;
+
+        return $this;
+    }
+
+    /**
+     * Add an array of new rules to the builder.
+     *
+     * @param  array  $searchRules
+     * @return $this
+     */
+    public function addRules(array $searchRules = [])
+    {
+        foreach ($searchRules as $searchRule) {
+            $this->addRule($searchRule);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the rules.
+     *
+     * @param  array  $searchRules
+     * @return $this
+     */
+    public function setRules(array $searchRules = [])
+    {
+        $this->searchRules = [];
+
+        foreach ($searchRules as $searchRule) {
+            $this->addRule($searchRule);
+        }
 
         return $this;
     }

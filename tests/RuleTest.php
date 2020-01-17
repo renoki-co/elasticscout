@@ -17,12 +17,12 @@ class RuleTest extends TestCase
 
         $searchResult =
             Post::search('How')
-                ->rule(new NameHighlightRule)
+                ->addRule(new NameHighlightRule)
                 ->first();
 
         $this->assertEquals(
             '<em>How</em> to breathe',
-            $searchResult->highlight->nameAsString
+            $searchResult->elasticsearch_highlights->nameAsString
         );
     }
 
@@ -35,12 +35,12 @@ class RuleTest extends TestCase
 
         $searchResultWithoutName =
             Post::search('How to breathe')
-                ->rule(new NameRule)
+                ->addRule(new NameRule)
                 ->first();
 
         $searchResultWithName =
                 Post::search('Not important')
-                    ->rule(new NameRule('How to breathe'))
+                    ->addRule(new NameRule('How to breathe'))
                     ->first();
 
         $this->assertTrue(

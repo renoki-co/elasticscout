@@ -8,7 +8,6 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Rennokki\ElasticScout\Facades\ElasticClient;
 use Rennokki\ElasticScout\Payloads\IndexPayload;
-use Rennokki\ElasticScout\Payloads\RawPayload;
 use Rennokki\ElasticScout\Payloads\TypePayload;
 
 abstract class Index
@@ -121,14 +120,14 @@ abstract class Index
      * Get the index payload instance.
      *
      * @param  bool  $withAlias
-     * @return IndexPayload
+     * @return \Rennokki\ElasticScout\Payloads\IndexPayload
      */
     public function getPayloadInstance($withAlias = false): IndexPayload
     {
-        $payload = new IndexPayload($this);
+        $payload = Payload::index($this);
 
         if ($withAlias) {
-            $payload = $payload->set('name', $this->getWriteAlias());
+            $payload = $payload->set('name', $this->getMigratableAlias('write'));
         }
 
         return $payload;
@@ -148,11 +147,11 @@ abstract class Index
     /**
      * Get the model payload instance.
      *
-     * @return TypePayload
+     * @return \Rennokki\ElasticScout\Payloads\TypePayload
      */
     public function getModelPayloadInstance(): TypePayload
     {
-        return new TypePayload($this->model);
+        return Payload::type($this->model);
     }
 
     /**
@@ -253,7 +252,7 @@ abstract class Index
             return true;
         }
 
-        $payload = (new RawPayload)
+        $payload = Payload::raw()
             ->set('index', $this->getAliasName())
             ->get();
 
@@ -330,7 +329,7 @@ abstract class Index
                 ->set('include_type_name', 'true');
 
         if ($this->isMigratable()) {
-            $payload = $payload->useAlias('write');
+            $payload = $payload->withAlias('write');
         }
 
         ElasticClient::indices()

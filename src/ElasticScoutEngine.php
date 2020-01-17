@@ -7,8 +7,8 @@ use Illuminate\Support\Arr;
 use Laravel\Scout\Builder;
 use Laravel\Scout\Engines\Engine;
 use Rennokki\ElasticScout\Builders\SearchQueryBuilder;
+use Rennokki\ElasticScout\Contracts\Indexer;
 use Rennokki\ElasticScout\Facades\ElasticClient;
-use Rennokki\ElasticScout\Indexers\Indexer;
 use Rennokki\ElasticScout\Payloads\TypePayload;
 use stdClass;
 
@@ -17,7 +17,7 @@ class ElasticScoutEngine extends Engine
     /**
      * The indexer interface.
      *
-     * @var \Rennokki\ElasticScout\Indexers\Indexer
+     * @var \Rennokki\ElasticScout\Contracts\Indexer
      */
     protected $indexer;
 
@@ -38,7 +38,7 @@ class ElasticScoutEngine extends Engine
     /**
      * ElasticScoutEngine constructor.
      *
-     * @param  \Rennokki\ElasticScout\Indexers\Indexer  $indexer
+     * @param  \Rennokki\ElasticScout\Contracts\Indexer  $indexer
      * @param  bool  $syncMappingOnSave
      * @return void
      */
@@ -174,11 +174,11 @@ class ElasticScoutEngine extends Engine
     {
         $payloadCollection = collect();
 
-        $payload = (new TypePayload($builder->model))
-                ->setIfNotEmpty(
-                    'body.query.bool.must.match_all',
-                    new stdClass()
-                );
+        $payload = Payload::type($builder->model)
+            ->setIfNotEmpty(
+                'body.query.bool.must.match_all',
+                new stdClass()
+            );
 
         $payloadCollection->push($payload);
 
@@ -195,23 +195,25 @@ class ElasticScoutEngine extends Engine
     protected function initializeSearchQueryPayloadBuilder(Builder $builder, array $options = [])
     {
         $payloadCollection = collect();
-        $searchRules = $builder->rules ?: $builder->model->getElasticScoutSearchRules();
+        $searchRules = $builder->searchRules ?: $builder->model->getElasticScoutSearchRules();
 
-        foreach ($searchRules as $rule) {
-            $payload = new TypePayload($builder->model);
+        foreach ($searchRules as $searchRule) {
+            $payload = Payload::type($builder->model);
 
-            if (is_callable($rule)) {
-                $payload->setIfNotEmpty('body.query.bool', call_user_func($rule, $builder));
-            } else {
-                if ($rule->isApplicable()) {
-                    $payload->setIfNotEmpty('body.query.bool', $rule->buildQueryPayload($builder));
+            if (! $searchRule->isApplicable()) {
+                continue;
+            }
 
-                    if ($options['highlight'] ?? true) {
-                        $payload->setIfNotEmpty('body.highlight', $rule->buildHighlightPayload($builder));
-                    }
-                } else {
-                    continue;
-                }
+            $payload->setIfNotEmpty(
+                'body.query.bool',
+                $searchRule->buildQueryPayload($builder)
+            );
+
+            if ($options['highlight'] ?? true) {
+                $payload->setIfNotEmpty(
+                    'body.highlight',
+                    $searchRule->buildHighlightPayload($builder)
+                );
             }
 
             $payloadCollection->push($payload);
@@ -370,7 +372,7 @@ class ElasticScoutEngine extends Engine
                     $model = $models[$id];
 
                     if (isset($hit['highlight'])) {
-                        $model->highlight = new Highlight($hit['highlight']);
+                        $model->elasticsearch_highlights = new Highlight($hit['highlight']);
                     }
 
                     return $model;
