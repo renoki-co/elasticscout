@@ -108,4 +108,17 @@ class IndexTest extends TestCase
         $this->assertTrue($index->exists());
         $this->assertTrue($index->hasAlias());
     }
+
+    public function test_raw_index()
+    {
+        $restaurant = factory(Restaurant::class)->make();
+        $index = $restaurant->getIndex();
+
+        $index->sync();
+
+        $rawIndex = $index->getRaw();
+
+        $this->assertEquals($index->getSettings()['analysis'], $rawIndex['settings']['index']['analysis']);
+        $this->assertEquals($index->getMapping(), $rawIndex['mappings']);
+    }
 }
