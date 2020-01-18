@@ -47,4 +47,42 @@ class RuleTest extends TestCase
             $searchResultWithoutName->is($searchResultWithName)
         );
     }
+
+    public function test_add_rules()
+    {
+        $builder = Post::search('Something');
+
+        $rules = [
+            new NameRule,
+            new NameHighlightRule,
+        ];
+
+        $builder->addRules($rules);
+
+        $this->assertEquals(
+            $builder->searchRules,
+            $rules
+        );
+    }
+
+    public function test_set_rules()
+    {
+        $builder = Post::search('Something');
+
+        $rules = [
+            new NameRule,
+            new NameHighlightRule,
+        ];
+
+        $builder->addRules($rules);
+
+        $builder->setRules([
+            new NameRule,
+        ]);
+
+        $this->assertEquals(
+            $builder->searchRules,
+            [new NameRule]
+        );
+    }
 }
