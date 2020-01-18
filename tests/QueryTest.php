@@ -102,7 +102,6 @@ class QueryTest extends TestCase
         );
 
         $this->assertTrue($booksWithPricesOtherThan100->first()->is($twilight));
-
     }
 
     public function test_where_ranges()
