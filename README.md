@@ -11,8 +11,24 @@ ElasticScout Driver for Elasticsearch 7.1+
 
 [![PayPal](https://img.shields.io/badge/PayPal-donate-blue.svg)](https://paypal.me/rennokki)
 
-This package is an initial fork from [the original package by Babenko Ivan's Elasticsearch](https://github.com/babenkoivan/scout-elasticsearch-driver). This package intends to have separate branches for each ES version and keep updating them individually to maintain the LTS better.
+This package is an initial fork from [the package by Babenko Ivan's Elasticscout Driver](https://github.com/babenkoivan/scout-elasticsearch-driver). This package was re-written using better code support and separate branches for different ES versions.
 
+Versioning
+------
+- For Elasticsearch 7.1, use the `7.1` branch and the `1.x` package version.
+- For Elasticsearch 7.2, use the `7.2` branch and the `2.x` package version.
+- For Elasticsearch 7.3, use the `7.3` branch and the `3.x` package version.
+- For Elasticsearch 7.4, use the `7.4` branch and the `4.x` package version.
+- For Elasticsearch 7.5, use the `7.5` branch and the `5.x` package version.
+
+Pull Requests
+------
+Pull requests are always welcomed!
+
+Keep in mind that general bugfixes go on `master` and specific-version fixes go on version branches.
+
+Contents
+------
 * [Install](#install)
 * [Base Usage](#base-usage)
 * [Indexes](#indexes)
