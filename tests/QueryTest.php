@@ -239,6 +239,32 @@ class QueryTest extends TestCase
         );
     }
 
+    public function test_where_exists()
+    {
+        $book = factory(Book::class)->make();
+        $tfios = factory(Book::class)->make(['name' => 'The Fault In Our Stars', 'price' => 100]);
+        $twilight = factory(Book::class)->make(['name' => 'Twilight', 'price' => 200]);
+
+        $book->getIndex()->sync();
+
+        $tfios->save();
+        $tfios->searchable();
+
+        $twilight->save();
+        $twilight->searchable();
+
+        $booksWithPrice = Book::elasticsearch()->whereExists('price')->get();
+        $booksWithoutPrice = Book::elasticsearch()->whereNotExists('price')->get();
+
+        $this->assertEquals(
+            2, $booksWithPrice->count()
+        );
+
+        $this->assertEquals(
+            0, $booksWithoutPrice->count()
+        );
+    }
+
     public function test_order_by()
     {
         $book = factory(Book::class)->make();
