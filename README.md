@@ -1,4 +1,4 @@
-ElasticScout Driver for Elasticsearch 7.1+
+ElasticScout - Elasticsearch Driver for Laravel Scout
 ================
 
 [![Latest Stable Version](https://poser.pugx.org/rennokki/elasticscout/v/stable)](https://packagist.org/packages/rennokki/elasticscout)
@@ -11,7 +11,9 @@ ElasticScout Driver for Elasticsearch 7.1+
 
 [![PayPal](https://img.shields.io/badge/PayPal-donate-blue.svg)](https://paypal.me/rennokki)
 
-This package is an initial fork from [the package by Babenko Ivan's Elasticscout Driver](https://github.com/babenkoivan/scout-elasticsearch-driver). This package was re-written using better code support and separate branches for different ES versions.
+ElasticScout is an Elasticsearch Driver for Laravel Scout.
+
+This package was froked from [Elasticscout Driver repo](https://github.com/babenkoivan/scout-elasticsearch-driver) and was improved with better code quality and LTS support for multiple Elasticsearch versions.
 
 Versioning
 ------
