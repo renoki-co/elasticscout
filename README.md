@@ -11,7 +11,7 @@ ElasticScout - Elasticsearch Driver for Laravel Scout
 
 [![PayPal](https://img.shields.io/badge/PayPal-donate-blue.svg)](https://paypal.me/rennokki)
 
-This package was shaped from [Elasticscout Driver repo](https://github.com/babenkoivan/scout-elasticsearch-driver).
+This package was shaped from [Babenko Ivan's Elasticscout Driver repo](https://github.com/babenkoivan/scout-elasticsearch-driver).
 
 Contents
 ------
