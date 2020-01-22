@@ -11,33 +11,30 @@ ElasticScout - Elasticsearch Driver for Laravel Scout
 
 [![PayPal](https://img.shields.io/badge/PayPal-donate-blue.svg)](https://paypal.me/rennokki)
 
-ElasticScout is an Elasticsearch Driver for Laravel Scout.
-
-This package was froked from [Elasticscout Driver repo](https://github.com/babenkoivan/scout-elasticsearch-driver) and was improved with better code quality and LTS support for multiple Elasticsearch versions.
-
-Versioning
-------
-- For Elasticsearch 7.1, use the `7.1` branch and the `1.x` package version.
-- For Elasticsearch 7.2, use the `7.2` branch and the `2.x` package version.
-- For Elasticsearch 7.3, use the `7.3` branch and the `3.x` package version.
-- For Elasticsearch 7.4, use the `7.4` branch and the `4.x` package version.
-- For Elasticsearch 7.5, use the `7.5` branch and the `5.x` package version.
-
-Pull Requests
-------
-Pull requests are always welcomed!
-
-Keep in mind that general bugfixes go on `master` and specific-version fixes go on version branches.
+This package was shaped from [Elasticscout Driver repo](https://github.com/babenkoivan/scout-elasticsearch-driver).
 
 Contents
 ------
-* [Install](#install)
-* [Base Usage](#base-usage)
-* [Indexes](#indexes)
-* [Search Query](#search-query)
-* [Filter Query](#filter-query)
-* [Rules](#rules)
-* [Debugging](#debugging)
+- [ElasticScout - Elasticsearch Driver for Laravel Scout](#elasticscout---elasticsearch-driver-for-laravel-scout)
+  - [Contents](#contents)
+  - [Install](#install)
+  - [Configuring Scout](#configuring-scout)
+  - [Indexes](#indexes)
+    - [Creating an index](#creating-an-index)
+    - [Attach the index to a model](#attach-the-index-to-a-model)
+    - [Publish the index to Elasticsearch](#publish-the-index-to-elasticsearch)
+  - [Search Query](#search-query)
+  - [Filter Query](#filter-query)
+    - [Must, Must not, Should, Filter](#must-must-not-should-filter)
+    - [Append to body or query](#append-to-body-or-query)
+      - [Wheres](#wheres)
+    - [Regex filters](#regex-filters)
+    - [Existence check](#existence-check)
+    - [Geo-type searches](#geo-type-searches)
+  - [Rules](#rules)
+    - [Query Payload](#query-payload)
+    - [Highlight Payload](#highlight-payload)
+  - [Debugging](#debugging)
 
 Install
 ------
