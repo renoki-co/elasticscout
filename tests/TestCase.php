@@ -23,6 +23,7 @@ abstract class TestCase extends Orchestra
 
         $this->resetDatabase();
         $this->resetCluster();
+        $this->clearCache();
 
         $this->loadLaravelMigrations(['--database' => 'sqlite']);
         $this->loadMigrationsFrom(__DIR__.'/database/migrations');
@@ -120,5 +121,15 @@ abstract class TestCase extends Orchestra
     protected function resetCluster(): void
     {
         ElasticClient::indices()->delete(['index' => '*']);
+    }
+
+    /**
+     * Clear the cache.
+     *
+     * @return void
+     */
+    protected function clearCache()
+    {
+        $this->artisan('cache:clear');
     }
 }

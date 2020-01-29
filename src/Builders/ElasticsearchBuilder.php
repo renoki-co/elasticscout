@@ -7,9 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Laravel\Scout\Builder;
+use Rennokki\QueryCache\Contracts\QueryCacheModuleInterface;
+use Rennokki\QueryCache\Traits\QueryCacheModule;
 
-class ElasticsearchBuilder extends Builder
+class ElasticsearchBuilder extends Builder implements QueryCacheModuleInterface
 {
+    use QueryCacheModule;
+
     /**
      * The condition array.
      *
@@ -51,6 +55,14 @@ class ElasticsearchBuilder extends Builder
      * @var array
      */
     public $select = [];
+
+    /**
+     * Setting $columns for rennokki/laravel-eloquent-query-cache
+     * to avoid errors.
+     *
+     * @var array
+     */
+    protected $columns = [];
 
     /**
      * ElasticsearchBuilder constructor.
@@ -504,8 +516,13 @@ class ElasticsearchBuilder extends Builder
     /**
      * {@inheritdoc}
      */
-    public function get()
+    public function get($avoidCache = false)
     {
+        // Implementation for rennokki/laravel-eloquent-query-cache
+        if (! $this->shouldAvoidCache()) {
+            return $this->getFromQueryCache('get');
+        }
+
         $collection = parent::get();
 
         if (isset($this->with) && $collection->count() > 0) {
@@ -513,6 +530,42 @@ class ElasticsearchBuilder extends Builder
         }
 
         return $collection;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function first()
+    {
+        // Implementation for rennokki/laravel-eloquent-query-cache
+        if (! $this->shouldAvoidCache()) {
+            return $this->getFromQueryCache('first');
+        }
+
+        $collection = parent::get();
+
+        if (isset($this->with) && $collection->count() > 0) {
+            $collection->load($this->with);
+        }
+
+        return $collection->first();
+    }
+
+    /**
+     * Get the count.
+     *
+     * @return int
+     */
+    public function count()
+    {
+        // Implementation for rennokki/laravel-eloquent-query-cache
+        if (! $this->shouldAvoidCache()) {
+            return $this->getFromQueryCache('count');
+        }
+
+        return $this
+            ->engine()
+            ->count($this);
     }
 
     /**
@@ -558,18 +611,6 @@ class ElasticsearchBuilder extends Builder
         );
 
         return $this;
-    }
-
-    /**
-     * Get the count.
-     *
-     * @return int
-     */
-    public function count()
-    {
-        return $this
-            ->engine()
-            ->count($this);
     }
 
     /**
@@ -632,6 +673,21 @@ class ElasticsearchBuilder extends Builder
         return $this
             ->engine()
             ->buildSearchQueryPayloadCollection($this);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function generatePlainCacheKey(string $method = 'get', $id = null, $appends = null): string
+    {
+        $key = $method.$this->getPayload().$appends;
+
+        // Prepend the "count" keyword to the key.
+        if ($method === 'count') {
+            return "count:{$key}";
+        }
+
+        return $key;
     }
 
     /**

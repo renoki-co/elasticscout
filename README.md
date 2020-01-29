@@ -34,6 +34,7 @@ Contents
     - [Existence check](#existence-check)
     - [Geo-type searches](#geo-type-searches)
     - [Scopes](#scopes)
+  - [Cache Query-by-Query](#cache-query-by-query)
   - [Rules](#rules)
     - [Query Payload](#query-payload)
     - [Highlight Payload](#highlight-payload)
@@ -447,6 +448,20 @@ class Restaurant extends Model
 
 $nearbyRestaurants =
     Restaurant::nearby(45, 35, 1000)->get();
+```
+
+Cache Query-by-Query
+--------------------
+Query-by-query caching is available using [rennokki/laravel-eloquent-query-cache](https://github.com/rennokki/laravel-eloquent-query-cache). All you have to do is to check the repository on how to use it.
+
+Basically, you can cache requests like so:
+
+```php
+$booksByJohnGreen =
+    Book::elasticsearch()
+        ->cacheFor(now()->addMinutes(60))
+        ->where('author', 'John Green')
+        ->get();
 ```
 
 Rules
