@@ -17,5 +17,6 @@ $factory->define(\Rennokki\ElasticScout\Tests\Models\Book::class, function () {
     return [
         'name' => 'Book'.Str::random(5),
         'price' => mt_rand(10, 1000),
+        'fan_votes' => mt_rand(10, 1000),
     ];
 });

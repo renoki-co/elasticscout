@@ -28,9 +28,11 @@ Contents
     - [Must, Must not, Should, Filter](#must-must-not-should-filter)
     - [Append to body or query](#append-to-body-or-query)
     - [Wheres](#wheres)
+    - [Whens, Unless, Dynamic Wheres](#whens-unless-dynamic-wheres)
     - [Regex filters](#regex-filters)
     - [Existence check](#existence-check)
     - [Geo-type searches](#geo-type-searches)
+    - [Scopes](#scopes)
   - [Rules](#rules)
     - [Query Payload](#query-payload)
     - [Highlight Payload](#highlight-payload)
@@ -291,6 +293,46 @@ Book::elasticsearch()
     ->first();
 ```
 
+### Whens, Unless, Dynamic Wheres
+
+```php
+Book::elasticsearch()
+    ->when(true, function ($query) {
+        return $query->where('price', 100);
+    })->get();
+```
+
+```php
+Book::elasticsearch()
+    ->unless(false, function ($query) {
+        return $query->where('price', 100);
+    })->get();
+```
+
+```php
+Book::elasticsearch()
+    ->wherePrice(100)
+    ->get();
+
+// This is the equivalent.
+Book::elasticsearch()
+    ->where('price', 100)
+    ->get();
+```
+
+If the dynamic where contains multiple words, they are split by `snake_case`:
+
+```php
+Book::elasticsearch()
+    ->whereFanVotes(10)
+    ->get();
+
+// This is the same.
+Book::elasticsearch()
+    ->where('fan_votes', 10)
+    ->get();
+```
+
 ### Regex filters
 
 ```php
@@ -345,6 +387,23 @@ Restaurant::whereGeoShape(
     ],
     'WITHIN'
 )->get();
+```
+
+### Scopes
+
+Elasticscout also works with scopes that are defined in the main model.
+
+```php
+class Restaurant extends Model
+{
+    public function scopeNearby($query, $lat, $lon, $meters)
+    {
+        return $query->whereGeoDistance('location', [$lat, $lon], $meters.'m');
+    }
+}
+
+$nearbyRestaurants =
+    Restaurant::nearby(45, 35, 1000)->get();
 ```
 
 Rules

@@ -2,8 +2,10 @@
 
 namespace Rennokki\ElasticScout\Builders;
 
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Laravel\Scout\Builder;
 
 class ElasticsearchBuilder extends Builder
@@ -476,42 +478,6 @@ class ElasticsearchBuilder extends Builder
     }
 
     /**
-     * Explain the request.
-     *
-     * @return array
-     */
-    public function explain()
-    {
-        return $this
-            ->engine()
-            ->explain($this);
-    }
-
-    /**
-     * Profile the request.
-     *
-     * @return array
-     */
-    public function profile()
-    {
-        return $this
-            ->engine()
-            ->profile($this);
-    }
-
-    /**
-     * Build the payload.
-     *
-     * @return array
-     */
-    public function getPayload()
-    {
-        return $this
-            ->engine()
-            ->buildSearchQueryPayloadCollection($this);
-    }
-
-    /**
      * Eager load some some relations.
      *
      * @param  array|string  $relations
@@ -634,6 +600,90 @@ class ElasticsearchBuilder extends Builder
         });
     }
 
+
+    /**
+     * Explain the request.
+     *
+     * @return array
+     */
+    public function explain()
+    {
+        return $this
+            ->engine()
+            ->explain($this);
+    }
+
+    /**
+     * Profile the request.
+     *
+     * @return array
+     */
+    public function profile()
+    {
+        return $this
+            ->engine()
+            ->profile($this);
+    }
+
+    /**
+     * Build the payload.
+     *
+     * @return array
+     */
+    public function getPayload()
+    {
+        return $this
+            ->engine()
+            ->buildSearchQueryPayloadCollection($this);
+    }
+
+    /**
+     * Apply the callback's query changes if the given "value" is false.
+     *
+     * @param  mixed  $value
+     * @param  callable  $callback
+     * @param  callable|null  $default
+     * @return mixed|$this
+     */
+    public function unless($value, $callback, $default = null)
+    {
+        if (! $value) {
+            return $callback($this, $value) ?: $this;
+        } elseif ($default) {
+            return $default($this, $value) ?: $this;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Handles dynamic "where" clauses to the query.
+     *
+     * @param  string  $method
+     * @param  array  $parameters
+     * @return $this
+     */
+    public function dynamicWhere($method, $parameters)
+    {
+        $finder = Str::snake(substr($method, 5));
+
+        return $this->where($finder, $parameters[0]);
+    }
+
+    /**
+     * Apply the given scope on the current builder instance.
+     *
+     * @param  callable  $scope
+     * @param  array  $parameters
+     * @return mixed
+     */
+    public function callScope($scope, $parameters = [])
+    {
+        array_unshift($parameters, $this);
+
+        return call_user_func_array([$this->model, $scope], $parameters) ?: $this;
+    }
+
     /**
      * Dynamically handle calls into the query instance.
      *
@@ -643,12 +693,16 @@ class ElasticsearchBuilder extends Builder
      */
     public function __call($method, $parameters)
     {
+        // Search for scopes within the model.
         if (method_exists($this->model, $scope = 'scope'.ucfirst($method))) {
-            array_unshift($parameters, $this);
-
-            return call_user_func_array([$this, $scope], $parameters) ?: $this;
+            return $this->applyScope($scope, $parameters);
         }
 
-        return call_user_func_array([$this->model, $method], $parameters);
+        // Search for dynamic wheres.
+        if (Str::startsWith($method, 'where')) {
+            return $this->dynamicWhere($method, $parameters);
+        }
+
+        throw new Exception("The method {$method} does not exist!");
     }
 }

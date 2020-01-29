@@ -17,6 +17,7 @@ class Books extends Migration
             $table->increments('id');
             $table->string('name');
             $table->integer('price')->default(0);
+            $table->integer('fan_votes')->default(0);
             $table->timestamps();
         });
     }
