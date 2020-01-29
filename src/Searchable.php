@@ -105,11 +105,11 @@ trait Searchable
      * @param  callable|null  $callback
      * @return \Rennokki\ElasticScout\Builders\ElasticsearchBuilder
      */
-    public static function elasticsearch($callback = null)
+    public static function elasticsearch()
     {
         $softDelete = static::usesSoftDelete() && config('scout.soft_delete', false);
 
-        return new ElasticsearchBuilder(new static, $callback, $softDelete);
+        return new ElasticsearchBuilder(new static, $softDelete);
     }
 
     /**

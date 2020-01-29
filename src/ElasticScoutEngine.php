@@ -227,15 +227,6 @@ class ElasticScoutEngine extends Engine
      */
     protected function performSearch(Builder $builder, array $options = [])
     {
-        if ($builder->callback) {
-            return call_user_func(
-                $builder->callback,
-                ElasticClient::getFacadeRoot(),
-                $builder->query,
-                $options
-            );
-        }
-
         $results = [];
 
         $this
