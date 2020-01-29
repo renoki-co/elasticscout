@@ -633,4 +633,22 @@ class ElasticsearchBuilder extends Builder
             $this->must(['term' => ['__soft_deleted' => 1]]);
         });
     }
+    
+    /**
+     * Dynamically handle calls into the query instance.
+     *
+     * @param  string  $method
+     * @param  array   $parameters
+     * @return mixed
+     */
+    public function __call($method, $parameters)
+    {
+        if (method_exists($this->model, $scope = 'scope'.ucfirst($method))) {
+            array_unshift($parameters, $this);
+
+            return call_user_func_array([$this, $scope], $parameters) ?: $this;
+        }
+
+        return call_user_func_array([$this->model, $method], $parameters);
+    }
 }
