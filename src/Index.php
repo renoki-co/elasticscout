@@ -155,16 +155,6 @@ abstract class Index
     }
 
     /**
-     * Get the model payload for the cluster.
-     *
-     * @return array
-     */
-    public function getModelPayload(): array
-    {
-        return $this->getModelPayloadInstance()->get();
-    }
-
-    /**
      * Check if this index exists in the cluster.
      *
      * @return bool
