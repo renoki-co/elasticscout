@@ -56,14 +56,12 @@ class ElasticsearchBuilder extends Builder
      * ElasticsearchBuilder constructor.
      *
      * @param  \Illuminate\Database\Eloquent\Model  $model
-     * @param  callable|null  $callback
      * @param  bool  $softDelete
      * @return void
      */
-    public function __construct(Model $model, $callback = null, $softDelete = false)
+    public function __construct(Model $model, $softDelete = false)
     {
         $this->model = $model;
-        $this->callback = $callback;
 
         if ($softDelete) {
             $this->must([
