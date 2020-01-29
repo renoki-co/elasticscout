@@ -19,6 +19,7 @@ Contents
   - [Contents](#contents)
   - [Install](#install)
   - [Configuring Scout](#configuring-scout)
+    - [AWS Elasticsearch Service](#aws-elasticsearch-service)
   - [Indexes](#indexes)
     - [Creating an index](#creating-an-index)
     - [Attach the index to a model](#attach-the-index-to-a-model)
@@ -63,6 +64,19 @@ $ php artisan vendor:publish --provider="Laravel\Scout\ScoutServiceProvider"
 $ php artisan vendor:publish --provider="Rennokki\ElasticScout\ElasticScoutServiceProvider"
 ```
 
+If you wish to access directly the Elasticsearch Client, already set with the configuration of your own, you can do so by adding the facade to `config/app.php`:
+
+```php
+'ElasticScout' => Rennokki\ElasticScout\Facades\ElasticClient::class,
+```
+
+Then you can access it like you normally would:
+
+```php
+// Get all indexes
+ElasticScout::indices()->get(['index' => '*']);
+```
+
 Configuring Scout
 -----
 In your `.env` file, set yout `SCOUT_DRIVER` to `elasticscout`, alongside with Elasticsearch configuration:
@@ -73,6 +87,26 @@ SCOUT_DRIVER=elasticscout
 SCOUT_ELASTICSEARCH_HOST=localhost
 SCOUT_ELASTICSEARCH_PORT=9200
 ```
+
+### AWS Elasticsearch Service
+
+Amazon Elasticsearch Service works perfectly fine without any additional setup for VPC Clusters. However, it is a bit freaky about Public clusters because it requires IAM authentication.
+
+ElasticScout makes sure your authentication will be passed to the further requests by attaching a handler. All you have to do is to set your AWS keys and the right `443` port:
+
+```env
+AWS_ACCESS_KEY_ID=my_key
+AWS_SECRET_ACCESS_KEY=my_secret
+
+SCOUT_ELASTICSCOUT_AWS_ENABLED=true
+SCOUT_ELASTICSCOUT_AWS_REGION=us-east-1
+
+SCOUT_ELASTICSEARCH_HOST=search-xxxxxx.es.amazonaws.com
+SCOUT_ELASTICSEARCH_PORT=443
+SCOUT_ELASTICSEARCH_SCHEME=https
+```
+
+Please keep in mind: you do not need user & password for AWS Elasticsearch Service clusters.
 
 Indexes
 -----
