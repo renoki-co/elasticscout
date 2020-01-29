@@ -21,7 +21,7 @@ return [
         ],
 
         /**
-         * SSL
+         * SSL.
          *
          * If your Elasticsearch instance uses an out-dated or self-signed SSL
          * certificate, you will need to pass in the certificate bundle.  This can
@@ -35,11 +35,10 @@ return [
          *
          * @see https://www.elastic.co/guide/en/elasticsearch/client/php-api/2.0/_security.html#_ssl_encryption_2
          */
-
         'sslVerification' => null,
 
         /**
-         * Retries
+         * Retries.
          *
          * By default, the client will retry n times, where n = number of nodes in
          * your cluster. If you would like to disable retries, or change the number,
@@ -47,7 +46,6 @@ return [
          *
          * @see https://www.elastic.co/guide/en/elasticsearch/client/php-api/2.0/_configuration.html#_set_retries
          */
-
         'retries' => null,
 
         /**
@@ -58,68 +56,60 @@ return [
          */
 
         /**
-         * Sniff On Start
+         * Sniff On Start.
          *
          * @see https://www.elastic.co/guide/en/elasticsearch/client/php-api/2.0/_configuration.html
          */
-
         'sniffOnStart' => false,
 
         /**
-         * HTTP Handler
+         * HTTP Handler.
          *
          * @see https://www.elastic.co/guide/en/elasticsearch/client/php-api/2.0/_configuration.html#_configure_the_http_handler
          * @see http://ringphp.readthedocs.org/en/latest/client_handlers.html
          */
-
         'httpHandler' => null,
 
         /**
-         * Connection Pool
+         * Connection Pool.
          *
          * @see https://www.elastic.co/guide/en/elasticsearch/client/php-api/2.0/_configuration.html#_setting_the_connection_pool
          * @see https://www.elastic.co/guide/en/elasticsearch/client/php-api/2.0/_connection_pool.html
          */
-
         'connectionPool' => null,
 
         /**
-         * Connection Selector
+         * Connection Selector.
          *
          * @see https://www.elastic.co/guide/en/elasticsearch/client/php-api/2.0/_configuration.html#_setting_the_connection_selector
          * @see https://www.elastic.co/guide/en/elasticsearch/client/php-api/2.0/_selectors.html
          */
-
         'connectionSelector' => null,
 
         /**
-         * Serializer
+         * Serializer.
          *
          * @see https://www.elastic.co/guide/en/elasticsearch/client/php-api/2.0/_configuration.html#_setting_the_serializer
          * @see https://www.elastic.co/guide/en/elasticsearch/client/php-api/2.0/_serializers.html
          */
-
         'serializer' => null,
 
         /**
-         * Connection Factory
+         * Connection Factory.
          *
          * @see https://www.elastic.co/guide/en/elasticsearch/client/php-api/2.0/_configuration.html#_setting_a_custom_connectionfactory
          */
-
         'connectionFactory' => null,
 
         /**
-         * Endpoint
+         * Endpoint.
          *
          * @see https://www.elastic.co/guide/en/elasticsearch/client/php-api/6.0/_configuration.html#_set_the_endpoint_closure
          */
-
         'endpoint' => null,
 
-
         /**
-         * Register additional namespaces
+         * Register additional namespaces.
          *
          * An array of additional namespaces to register.
          *

@@ -21,7 +21,7 @@ use Rennokki\ElasticScout\Console\SyncIndexCommand;
 class ElasticScoutServiceProvider extends ServiceProvider
 {
     /**
-     * Map configuration array keys with ES ClientBuilder setters
+     * Map configuration array keys with ES ClientBuilder setters.
      *
      * @var array
      */
