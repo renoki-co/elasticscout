@@ -600,7 +600,6 @@ class ElasticsearchBuilder extends Builder
         });
     }
 
-
     /**
      * Explain the request.
      *
