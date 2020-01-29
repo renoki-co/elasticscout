@@ -694,7 +694,7 @@ class ElasticsearchBuilder extends Builder
     {
         // Search for scopes within the model.
         if (method_exists($this->model, $scope = 'scope'.ucfirst($method))) {
-            return $this->applyScope($scope, $parameters);
+            return $this->callScope($scope, $parameters);
         }
 
         // Search for dynamic wheres.
