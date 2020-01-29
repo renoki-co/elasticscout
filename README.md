@@ -27,7 +27,7 @@ Contents
   - [Filter Query](#filter-query)
     - [Must, Must not, Should, Filter](#must-must-not-should-filter)
     - [Append to body or query](#append-to-body-or-query)
-      - [Wheres](#wheres)
+    - [Wheres](#wheres)
     - [Regex filters](#regex-filters)
     - [Existence check](#existence-check)
     - [Geo-type searches](#geo-type-searches)
@@ -271,7 +271,7 @@ Post::elasticsearch()
     ->get();
 ```
 
-#### Wheres
+### Wheres
 
 ```php
 Post::elasticsearch()
