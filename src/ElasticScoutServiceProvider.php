@@ -8,6 +8,7 @@ use Elasticsearch\ClientBuilder;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Uri;
 use GuzzleHttp\Ring\Future\CompletedFutureArray;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 use InvalidArgumentException;
@@ -19,6 +20,24 @@ use Rennokki\ElasticScout\Console\SyncIndexCommand;
 
 class ElasticScoutServiceProvider extends ServiceProvider
 {
+    /**
+     * Map configuration array keys with ES ClientBuilder setters
+     *
+     * @var array
+     */
+    protected $configMappings = [
+        'sslVerification' => 'setSSLVerification',
+        'sniffOnStart' => 'setSniffOnStart',
+        'retries' => 'setRetries',
+        'httpHandler' => 'setHandler',
+        'connectionPool' => 'setConnectionPool',
+        'connectionSelector' => 'setSelector',
+        'serializer' => 'setSerializer',
+        'connectionFactory'  => 'setConnectionFactory',
+        'endpoint' => 'setEndpoint',
+        'namespaces' => 'registerNamespace',
+    ];
+
     /**
      * Boot the service provider.
      *
@@ -71,12 +90,26 @@ class ElasticScoutServiceProvider extends ServiceProvider
 
                 $clientBuilder->setHosts($connection['hosts']);
 
+                // Set additional client configuration
+                foreach ($this->configMappings as $key => $method) {
+                    $value = Arr::get($connection, $key);
+
+                    if (is_array($value)) {
+                        foreach ($value as $vItem) {
+                            $clientBuilder->$method($vItem);
+                        }
+                    } elseif ($value !== null) {
+                        $clientBuilder->$method($value);
+                    }
+                }
+
                 foreach ($connection['hosts'] as $host) {
                     if (isset($host['aws_enable']) && $host['aws_enable']) {
                         $clientBuilder->setHandler(function (array $request) use ($host) {
                             $psr7Handler = \Aws\default_http_handler();
                             $signer = new SignatureV4('es', $host['aws_region']);
-                            $request['headers']['Host'][0] = parse_url($request['headers']['Host'][0])['host'];
+
+                            // $request['headers']['Host'][0] = parse_url($request['headers']['Host'][0])['host'];
 
                             // Create a PSR-7 request from the array passed to the handler
                             $psr7Request = new Request(
@@ -94,7 +127,7 @@ class ElasticScoutServiceProvider extends ServiceProvider
                                 new Credentials($host['aws_key'], $host['aws_secret'])
                             );
 
-                            // Send the signed request to Amazon ES
+                            // Send the signed request to Amazon ES.
                             /** @var \Psr\Http\Message\ResponseInterface $response */
                             $response = $psr7Handler($signedRequest)
                                 ->then(function (\Psr\Http\Message\ResponseInterface $response) {
