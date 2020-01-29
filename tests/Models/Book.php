@@ -24,4 +24,9 @@ class Book extends Model implements HasElasticScoutIndex
     {
         return new BookIndex($this);
     }
+
+    public function scopeWithPriceBelow($query, int $price = 100)
+    {
+        return $query->where('price', '<', $price);
+    }
 }

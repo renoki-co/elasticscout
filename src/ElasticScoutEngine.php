@@ -134,11 +134,9 @@ class ElasticScoutEngine extends Engine
                         break;
 
                     case 'body_appends':
-                        $clauseKey = 'body';
-
                         foreach ($filters as $field => $value) {
                             $payload->add(
-                                "{$clauseKey}.{$field}",
+                                "body.{$field}",
                                 $value,
                                 false
                             );
@@ -146,11 +144,9 @@ class ElasticScoutEngine extends Engine
                         break;
 
                     case 'query_appends':
-                        $clauseKey = 'body.query';
-
                         foreach ($filters as $field => $value) {
                             $payload->add(
-                                "{$clauseKey}.{$field}",
+                                "body.query.{$field}",
                                 $value,
                                 false
                             );

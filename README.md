@@ -19,6 +19,7 @@ Contents
   - [Contents](#contents)
   - [Install](#install)
   - [Configuring Scout](#configuring-scout)
+    - [AWS Elasticsearch Service](#aws-elasticsearch-service)
   - [Indexes](#indexes)
     - [Creating an index](#creating-an-index)
     - [Attach the index to a model](#attach-the-index-to-a-model)
@@ -28,9 +29,11 @@ Contents
     - [Must, Must not, Should, Filter](#must-must-not-should-filter)
     - [Append to body or query](#append-to-body-or-query)
     - [Wheres](#wheres)
+    - [Whens, Unless, Dynamic Wheres](#whens-unless-dynamic-wheres)
     - [Regex filters](#regex-filters)
     - [Existence check](#existence-check)
     - [Geo-type searches](#geo-type-searches)
+    - [Scopes](#scopes)
   - [Rules](#rules)
     - [Query Payload](#query-payload)
     - [Highlight Payload](#highlight-payload)
@@ -61,6 +64,19 @@ $ php artisan vendor:publish --provider="Laravel\Scout\ScoutServiceProvider"
 $ php artisan vendor:publish --provider="Rennokki\ElasticScout\ElasticScoutServiceProvider"
 ```
 
+If you wish to access directly the Elasticsearch Client, already set with the configuration of your own, you can do so by adding the facade to `config/app.php`:
+
+```php
+'ElasticScout' => Rennokki\ElasticScout\Facades\ElasticClient::class,
+```
+
+Then you can access it like you normally would:
+
+```php
+// Get all indexes
+ElasticScout::indices()->get(['index' => '*']);
+```
+
 Configuring Scout
 -----
 In your `.env` file, set yout `SCOUT_DRIVER` to `elasticscout`, alongside with Elasticsearch configuration:
@@ -71,6 +87,35 @@ SCOUT_DRIVER=elasticscout
 SCOUT_ELASTICSEARCH_HOST=localhost
 SCOUT_ELASTICSEARCH_PORT=9200
 ```
+
+### AWS Elasticsearch Service
+
+Amazon Elasticsearch Service works perfectly fine without any additional setup for VPC Clusters. However, it is a bit freaky about Public clusters because it requires IAM authentication.
+
+You will first make sure that you have the right version of `elasticsearch/elasticsearch` package installed.
+For instance, for a `7.1` cluster, you should install `elasticsearch/elasticsearch:"7.1.*"`, otherwise you will receive errors in your application.
+
+```bash
+$ composer require elasticsearch/elasticsearch:"7.1.*"
+```
+
+To find the right package size, check the [Elasticsearch's Version Matrix](https://github.com/elastic/elasticsearch-php#version-matrix).
+
+When requesting data from an AWS Elasticsearch cluster, ElasticScout makes sure your authentication will be passed to the further requests by attaching a handler. All you have to do is to enable the setup, by setting the  `SCOUT_ELASTICSCOUT_AWS_ENABLED` env variable:
+
+```env
+AWS_ACCESS_KEY_ID=my_key
+AWS_SECRET_ACCESS_KEY=my_secret
+
+SCOUT_ELASTICSCOUT_AWS_ENABLED=true
+SCOUT_ELASTICSCOUT_AWS_REGION=us-east-1
+
+SCOUT_ELASTICSEARCH_HOST=search-xxxxxx.es.amazonaws.com
+SCOUT_ELASTICSEARCH_PORT=443
+SCOUT_ELASTICSEARCH_SCHEME=https
+```
+
+Please keep in mind: you do not need user & password for AWS Elasticsearch Service clusters.
 
 Indexes
 -----
@@ -291,6 +336,46 @@ Book::elasticsearch()
     ->first();
 ```
 
+### Whens, Unless, Dynamic Wheres
+
+```php
+Book::elasticsearch()
+    ->when(true, function ($query) {
+        return $query->where('price', 100);
+    })->get();
+```
+
+```php
+Book::elasticsearch()
+    ->unless(false, function ($query) {
+        return $query->where('price', 100);
+    })->get();
+```
+
+```php
+Book::elasticsearch()
+    ->wherePrice(100)
+    ->get();
+
+// This is the equivalent.
+Book::elasticsearch()
+    ->where('price', 100)
+    ->get();
+```
+
+If the dynamic where contains multiple words, they are split by `snake_case`:
+
+```php
+Book::elasticsearch()
+    ->whereFanVotes(10)
+    ->get();
+
+// This is the same.
+Book::elasticsearch()
+    ->where('fan_votes', 10)
+    ->get();
+```
+
 ### Regex filters
 
 ```php
@@ -345,6 +430,23 @@ Restaurant::whereGeoShape(
     ],
     'WITHIN'
 )->get();
+```
+
+### Scopes
+
+Elasticscout also works with scopes that are defined in the main model.
+
+```php
+class Restaurant extends Model
+{
+    public function scopeNearby($query, $lat, $lon, $meters)
+    {
+        return $query->whereGeoDistance('location', [$lat, $lon], $meters.'m');
+    }
+}
+
+$nearbyRestaurants =
+    Restaurant::nearby(45, 35, 1000)->get();
 ```
 
 Rules

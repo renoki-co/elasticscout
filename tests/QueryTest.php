@@ -2,6 +2,7 @@
 
 namespace Rennokki\ElasticScout\Tests;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Rennokki\ElasticScout\Tests\Models\Book;
 use Rennokki\ElasticScout\Tests\Models\Restaurant;
@@ -282,6 +283,156 @@ class QueryTest extends TestCase
 
         $this->assertTrue(
             $booksByExpensiveFirst->first()->is($twilight)
+        );
+    }
+
+    public function test_scopes()
+    {
+        $book = factory(Book::class)->make();
+        $tfios = factory(Book::class)->make(['name' => 'The Fault In Our Stars', 'price' => 100]);
+        $twilight = factory(Book::class)->make(['name' => 'Twilight', 'price' => 200]);
+
+        $book->getIndex()->sync();
+
+        $tfios->save();
+        $tfios->searchable();
+
+        $twilight->save();
+        $twilight->searchable();
+
+        $query = Book::elasticsearch()->withPriceBelow(200);
+
+        $this->assertInstanceOf(\Rennokki\ElasticScout\Builders\ElasticsearchBuilder::class, $query);
+
+        $bookWithPriceBelow200 = $query->get();
+
+        $this->assertEquals(1, $bookWithPriceBelow200->count());
+        $this->assertTrue($bookWithPriceBelow200->first()->is($tfios));
+    }
+
+    public function test_unless()
+    {
+        $book = factory(Book::class)->make();
+        $tfios = factory(Book::class)->make(['name' => 'The Fault In Our Stars', 'price' => 100]);
+        $twilight = factory(Book::class)->make(['name' => 'Twilight', 'price' => 200]);
+
+        $book->getIndex()->sync();
+
+        $tfios->save();
+        $tfios->searchable();
+
+        $twilight->save();
+        $twilight->searchable();
+
+        $query = Book::elasticsearch()->unless(false, function ($query) {
+            return $query->where('price', 200);
+        });
+
+        $this->assertInstanceOf(\Rennokki\ElasticScout\Builders\ElasticsearchBuilder::class, $query);
+
+        $twilightBook = $query->get();
+
+        $this->assertEquals(1, $twilightBook->count());
+        $this->assertTrue($twilightBook->first()->is($twilight));
+    }
+
+    public function test_when()
+    {
+        $book = factory(Book::class)->make();
+        $tfios = factory(Book::class)->make(['name' => 'The Fault In Our Stars', 'price' => 100]);
+        $twilight = factory(Book::class)->make(['name' => 'Twilight', 'price' => 200]);
+
+        $book->getIndex()->sync();
+
+        $tfios->save();
+        $tfios->searchable();
+
+        $twilight->save();
+        $twilight->searchable();
+
+        $query = Book::elasticsearch()->when(true, function ($query) {
+            return $query->where('price', 200);
+        });
+
+        $this->assertInstanceOf(\Rennokki\ElasticScout\Builders\ElasticsearchBuilder::class, $query);
+
+        $twilightBook = $query->get();
+
+        $this->assertEquals(1, $twilightBook->count());
+        $this->assertTrue($twilightBook->first()->is($twilight));
+    }
+
+    public function test_dynamic_where()
+    {
+        $book = factory(Book::class)->make();
+        $tfios = factory(Book::class)->make(['name' => 'The Fault In Our Stars', 'price' => 100]);
+        $twilight = factory(Book::class)->make(['name' => 'Twilight', 'price' => 200]);
+
+        $book->getIndex()->sync();
+
+        $tfios->save();
+        $tfios->searchable();
+
+        $twilight->save();
+        $twilight->searchable();
+
+        $query = Book::elasticsearch()->wherePrice(200);
+
+        $this->assertInstanceOf(\Rennokki\ElasticScout\Builders\ElasticsearchBuilder::class, $query);
+
+        $twilightBook = $query->get();
+
+        $this->assertEquals(1, $twilightBook->count());
+        $this->assertTrue($twilightBook->first()->is($twilight));
+    }
+
+    public function test_dynamic_where_for_snake_case()
+    {
+        $book = factory(Book::class)->make();
+        $tfios = factory(Book::class)->make(['name' => 'The Fault In Our Stars', 'price' => 100, 'fan_votes' => 50]);
+        $twilight = factory(Book::class)->make(['name' => 'Twilight', 'price' => 200, 'fan_votes' => 0]);
+
+        $book->getIndex()->sync();
+
+        $tfios->save();
+        $tfios->searchable();
+
+        $twilight->save();
+        $twilight->searchable();
+
+        $query = Book::elasticsearch()->whereFanVotes(50);
+
+        $this->assertInstanceOf(\Rennokki\ElasticScout\Builders\ElasticsearchBuilder::class, $query);
+
+        $tfiosBook = $query->get();
+
+        $this->assertEquals(1, $tfiosBook->count());
+        $this->assertTrue($tfiosBook->first()->is($tfios));
+    }
+
+    public function test_append_to_body()
+    {
+        $payload =
+            Book::elasticsearch()
+                ->appendToBody('minimum_should_match', 1)
+                ->getPayload()
+                ->toArray();
+
+        $this->assertEquals(
+            1, Arr::get($payload[0], 'body.minimum_should_match')
+        );
+    }
+
+    public function test_append_to_query()
+    {
+        $payload =
+            Book::elasticsearch()
+                ->appendToQuery('should', 'yes')
+                ->getPayload()
+                ->toArray();
+
+        $this->assertEquals(
+            'yes', Arr::get($payload[0], 'body.query.should')
         );
     }
 

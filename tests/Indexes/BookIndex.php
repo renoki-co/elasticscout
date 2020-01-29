@@ -7,7 +7,7 @@ use Rennokki\ElasticScout\Migratable;
 
 class BookIndex extends Index
 {
-    use Migratable;
+    // use Migratable;
 
     /**
      * The settings applied to this index.
