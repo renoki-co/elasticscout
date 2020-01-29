@@ -46,10 +46,6 @@ class DeleteIndexCommand extends Command
         if ($index->delete()) {
             $this->line("The index {$indexClass} (named {$indexName}) was deleted from the cluster.");
 
-            if ($index->hasAlias()) {
-                $this->line("The index alias {$indexAliasName} was also deleted from the cluster.");
-            }
-
             return true;
         }
 
