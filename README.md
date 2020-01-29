@@ -460,7 +460,6 @@ Basically, you can cache requests like so:
 $booksByJohnGreen =
     Book::elasticsearch()
         ->cacheFor(now()->addMinutes(60))
-        ->cacheTags(['author:john_green'])
         ->where('author', 'John Green')
         ->get();
 ```
