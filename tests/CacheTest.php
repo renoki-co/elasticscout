@@ -13,6 +13,7 @@ class CacheTest extends TestCase
 
         $restaurant->getIndex()->sync();
         $restaurant->save();
+        $restaurant->searchable();
 
         $query = Restaurant::elasticsearch()->cacheFor(3600);
         $hash = $query->generateCacheKey();
@@ -30,6 +31,7 @@ class CacheTest extends TestCase
 
         $restaurant->getIndex()->sync();
         $restaurant->save();
+        $restaurant->searchable();
 
         $query = Restaurant::elasticsearch()->cacheFor(3600);
         $hash = $query->generateCacheKey();
@@ -47,6 +49,7 @@ class CacheTest extends TestCase
 
         $restaurant->getIndex()->sync();
         $restaurant->save();
+        $restaurant->searchable();
 
         $query = Restaurant::elasticsearch()->cacheFor(3600);
         $hash = $query->generateCacheKey();
