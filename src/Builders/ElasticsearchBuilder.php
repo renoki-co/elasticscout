@@ -633,7 +633,7 @@ class ElasticsearchBuilder extends Builder
             $this->must(['term' => ['__soft_deleted' => 1]]);
         });
     }
-    
+
     /**
      * Dynamically handle calls into the query instance.
      *
