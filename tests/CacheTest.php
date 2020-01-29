@@ -40,4 +40,23 @@ class CacheTest extends TestCase
             Cache::get("leqc:{$hash}")
         );
     }
+
+    public function test_count_cache()
+    {
+        $restaurant = factory(Restaurant::class)->make();
+
+        $restaurant->getIndex()->sync();
+        $restaurant->save();
+
+        $query = Restaurant::elasticsearch()->cacheFor(3600);
+        $hash = $query->generateCacheKey();
+
+        $count = $query->count();
+
+        $this->assertNotNull(
+            Cache::get("leqc:{$hash}")
+        );
+
+        $this->assertEquals(1, $count);
+    }
 }
