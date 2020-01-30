@@ -516,7 +516,7 @@ class ElasticsearchBuilder extends Builder implements QueryCacheModuleInterface
     /**
      * {@inheritdoc}
      */
-    public function get($avoidCache = false)
+    public function get()
     {
         // Implementation for rennokki/laravel-eloquent-query-cache
         if (! $this->shouldAvoidCache()) {
