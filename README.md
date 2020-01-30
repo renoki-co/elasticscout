@@ -447,7 +447,7 @@ class Restaurant extends Model
 }
 
 $nearbyRestaurants =
-    Restaurant::nearby(45, 35, 1000)->get();
+    Restaurant::search('Dominos')->nearby(45, 35, 1000)->get();
 ```
 
 Cache Query-by-Query
