@@ -9,8 +9,6 @@ ElasticScout - Elasticsearch Driver for Laravel Scout
 [![StyleCI](https://github.styleci.io/repos/233681522/shield?branch=master)](https://github.styleci.io/repos/233681522)
 [![License](https://poser.pugx.org/rennokki/elasticscout/license)](https://packagist.org/packages/rennokki/elasticscout)
 
-[![PayPal](https://img.shields.io/badge/PayPal-donate-blue.svg)](https://paypal.me/rennokki)
-
 This package was shaped from [Babenko Ivan's Elasticscout Driver repo](https://github.com/babenkoivan/scout-elasticsearch-driver).
 
 Contents
@@ -707,6 +705,7 @@ If you discover any security related issues, please email alex@renoki.org instea
 ## Credits
 
 - [Alex Renoki](https://github.com/rennokki)
+- [Ivan Babenko](https://github.com/babenkoivan)
 - [All Contributors](../../contributors)
 
 ## License
