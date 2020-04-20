@@ -39,6 +39,11 @@ Contents
     - [Query Payload](#query-payload)
     - [Highlight Payload](#highlight-payload)
   - [Debugging](#debugging)
+  - [Testing](#testing)
+  - [Contributing](#contributing)
+  - [Security](#security)
+  - [Credits](#credits)
+  - [License](#license)
 
 Install
 ------
@@ -684,3 +689,26 @@ You can see how the payload looks like by calling `getPayload()`.
 ```php
 Restaurant::search('Dominos')->getPayload();
 ```
+
+## Testing
+
+``` bash
+vendor/bin/phpunit
+```
+
+## Contributing
+
+Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+
+## Security
+
+If you discover any security related issues, please email alex@renoki.org instead of using the issue tracker.
+
+## Credits
+
+- [Alex Renoki](https://github.com/rennokki)
+- [All Contributors](../../contributors)
+
+## License
+
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
