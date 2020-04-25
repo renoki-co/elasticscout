@@ -2,7 +2,7 @@
 [![Latest Stable Version](https://poser.pugx.org/rennokki/elasticscout/v/stable)](https://packagist.org/packages/rennokki/elasticscout)
 [![Total Downloads](https://poser.pugx.org/rennokki/elasticscout/downloads)](https://packagist.org/packages/rennokki/elasticscout)
 [![Monthly Downloads](https://poser.pugx.org/rennokki/elasticscout/d/monthly)](https://packagist.org/packages/rennokki/elasticscout)
-[![codecov](https://codecov.io/gh/rennokki/elasticscout/branch/master/graph/badge.svg)](https://codecov.io/gh/rennokki/elasticscout/branch/master)
+[![codecov](https://codecov.io/gh/renoki-co/elasticscout/branch/master/graph/badge.svg)](https://codecov.io/gh/renoki-co/elasticscout/branch/master)
 [![StyleCI](https://github.styleci.io/repos/233681522/shield?branch=master)](https://github.styleci.io/repos/233681522)
 [![License](https://poser.pugx.org/rennokki/elasticscout/license)](https://packagist.org/packages/rennokki/elasticscout)
 
