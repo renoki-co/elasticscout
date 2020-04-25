@@ -15,36 +15,36 @@ Contents
 ------
 - [ElasticScout - Elasticsearch Driver for Laravel Scout](#elasticscout---elasticsearch-driver-for-laravel-scout)
   - [Contents](#contents)
-  - [Install](#install)
-  - [Configuring Scout](#configuring-scout)
-    - [AWS Elasticsearch Service](#aws-elasticsearch-service)
-  - [Indexes](#indexes)
-    - [Creating an index](#creating-an-index)
-    - [Attach the index to a model](#attach-the-index-to-a-model)
-    - [Publish the index to Elasticsearch](#publish-the-index-to-elasticsearch)
-  - [Search Query](#search-query)
-  - [Filter Query](#filter-query)
+- [Install](#install)
+- [Configuring Scout](#configuring-scout)
+  - [AWS Elasticsearch Service](#aws-elasticsearch-service)
+- [Indexes](#indexes)
+  - [Creating an index](#creating-an-index)
+  - [Attach the index to a model](#attach-the-index-to-a-model)
+  - [Publish the index to Elasticsearch](#publish-the-index-to-elasticsearch)
+- [Search Query](#search-query)
+- [Filter Query](#filter-query)
     - [Must, Must not, Should, Filter](#must-must-not-should-filter)
-    - [Append to body or query](#append-to-body-or-query)
-    - [Wheres](#wheres)
-    - [Whens, Unless, Dynamic Wheres](#whens-unless-dynamic-wheres)
-    - [Regex filters](#regex-filters)
-    - [Existence check](#existence-check)
-    - [Geo-type searches](#geo-type-searches)
-    - [Scopes](#scopes)
-  - [Cache Query-by-Query](#cache-query-by-query)
-  - [Rules](#rules)
-    - [Query Payload](#query-payload)
-    - [Highlight Payload](#highlight-payload)
-  - [Debugging](#debugging)
+- [Query Customizations](#query-customizations)
+  - [Wheres](#wheres)
+  - [Whens, Unless, Dynamic Wheres](#whens-unless-dynamic-wheres)
+  - [Regex filters](#regex-filters)
+  - [Existence check](#existence-check)
+  - [Geo-type searches](#geo-type-searches)
+  - [Working with Scopes](#working-with-scopes)
+- [Query Caching](#query-caching)
+- [Elasticsearch Rules](#elasticsearch-rules)
+  - [Query Payload](#query-payload)
+  - [Highlight Payload](#highlight-payload)
+- [Debugging queries](#debugging-queries)
   - [Testing](#testing)
   - [Contributing](#contributing)
   - [Security](#security)
   - [Credits](#credits)
   - [License](#license)
 
-Install
-------
+# Install
+
 Install the package using Composer CLI:
 
 ```bash
@@ -81,8 +81,8 @@ Then you can access it like you normally would:
 ElasticScout::indices()->get(['index' => '*']);
 ```
 
-Configuring Scout
------
+# Configuring Scout
+
 In your `.env` file, set yout `SCOUT_DRIVER` to `elasticscout`, alongside with Elasticsearch configuration:
 
 ```env
@@ -92,7 +92,7 @@ SCOUT_ELASTICSEARCH_HOST=localhost
 SCOUT_ELASTICSEARCH_PORT=9200
 ```
 
-### AWS Elasticsearch Service
+## AWS Elasticsearch Service
 
 Amazon Elasticsearch Service works perfectly fine without any additional setup for VPC Clusters. However, it is a bit freaky about Public clusters because it requires IAM authentication.
 
@@ -121,9 +121,10 @@ SCOUT_ELASTICSEARCH_SCHEME=https
 
 Please keep in mind: you do not need user & password for AWS Elasticsearch Service clusters.
 
-Indexes
------
-### Creating an index
+# Indexes
+
+## Creating an index
+
 In Elasticsearch, the Index is the equivalent of a table in MySQL, or a collection in MongoDB. You can create an index class using artisan:
 
 ```bash
@@ -133,8 +134,6 @@ $ php artisan make:elasticscout:index PostIndex
 You will have something like this in `app/Indexes/PostIndex.php`:
 
 ```php
-<?php
-
 namespace App\Indexes;
 
 use Rennokki\ElasticScout\Index;
@@ -211,7 +210,8 @@ class PostIndex extends Index
 }
 ```
 
-### Attach the index to a model
+## Attach the index to a model
+
 All the models that can be searched into should use the `Rennokki\ElasticScout\Searchable` trait and implement the `Rennokki\ElasticScout\Index\HasElasticScoutIndex` interface:
 
 ```php
@@ -248,7 +248,7 @@ class Post extends Model implements HasElasticScoutIndex
 }
 ```
 
-### Publish the index to Elasticsearch
+## Publish the index to Elasticsearch
 To publish the index to Elasticsearch, you should sync the index:
 
 ```bash
@@ -267,8 +267,8 @@ $restaurant = Restaurant::first();
 $restaurant->getIndex()->sync(); // returns true/false
 ```
 
-Search Query
------
+# Search Query
+
 To query data into Elasticsearch, you may use the `search()` method:
 
 ```php
@@ -284,8 +284,8 @@ In case you want just the number of the documents, you can do so:
 $posts = Post::search('Lumen')->count();
 ```
 
-Filter Query
------
+# Filter Query
+
 ElasticScout allows you to create a custom query using built-in methods by going through the `elasticsearch()` method.
 
 ### Must, Must not, Should, Filter
@@ -301,7 +301,8 @@ Post::elasticsearch()
     ->get();
 ```
 
-### Append to body or query
+# Query Customizations
+
 You can append data to body or query keys.
 
 ```php
@@ -320,7 +321,7 @@ Post::elasticsearch()
     ->get();
 ```
 
-### Wheres
+## Wheres
 
 ```php
 Post::elasticsearch()
@@ -340,7 +341,7 @@ Book::elasticsearch()
     ->first();
 ```
 
-### Whens, Unless, Dynamic Wheres
+## Whens, Unless, Dynamic Wheres
 
 ```php
 Book::elasticsearch()
@@ -380,7 +381,7 @@ Book::elasticsearch()
     ->get();
 ```
 
-### Regex filters
+## Regex filters
 
 ```php
 Post::elasticsearch()
@@ -388,7 +389,8 @@ Post::elasticsearch()
     ->get();
 ```
 
-### Existence check
+## Existence check
+
 Since Elasticsearch has a NoSQL structure, you should be able to check if a field exists.
 
 ```php
@@ -398,7 +400,7 @@ Post::elasticsearch()
     ->get();
 ```
 
-### Geo-type searches
+## Geo-type searches
 
 ```php
 Restaurant::whereGeoDistance('location', [-70, 40], '1000m')
@@ -436,7 +438,7 @@ Restaurant::whereGeoShape(
 )->get();
 ```
 
-### Scopes
+## Working with Scopes
 
 Elasticscout also works with scopes that are defined in the main model.
 
@@ -453,9 +455,9 @@ $nearbyRestaurants =
     Restaurant::search('Dominos')->nearby(45, 35, 1000)->get();
 ```
 
-Cache Query-by-Query
---------------------
-Query-by-query caching is available using [rennokki/laravel-eloquent-query-cache](https://github.com/rennokki/laravel-eloquent-query-cache). All you have to do is to check the repository on how to use it.
+# Query Caching
+
+Query-by-query caching is available using [rennokki/laravel-eloquent-query-cache](https://github.com/renoki-co/laravel-eloquent-query-cache). All you have to do is to check the repository on how to use it.
 
 Basically, you can cache requests like so:
 
@@ -467,8 +469,8 @@ $booksByJohnGreen =
         ->get();
 ```
 
-Rules
------
+# Elasticsearch Rules
+
 A search rule is a class that can be used on multiple queries, helping you to define custom payload only once. This works only for the Search Query builder.
 
 To create a rule, use the artisan command:
@@ -480,8 +482,6 @@ $ php artisan make:elasticscout:rule NameRule
 You will get something like this:
 
 ```php
-<?php
-
 namespace App\SearchRules;
 
 use Rennokki\ElasticScout\Builders\SearchQueryBuilder;
@@ -527,7 +527,8 @@ class NameRule extends SearchRule
 }
 ```
 
-### Query Payload
+## Query Payload
+
 Within the `buildQueryPayload()`, you should define the query payload that will take place during the query.
 
 For example, you can get started with some bool query. Details about the bool query you can find [in the Elasticsearch documentation](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-bool-query.html).
@@ -600,7 +601,7 @@ Restaurant::search('Dominos')
     ])->get();
 ```
 
-### Highlight Payload
+## Highlight Payload
 When building the highlight payload, you can pass the array to the `buildHighlightPayload()` method.
 More details on highlighting can be found [in the Elasticsearch documentation](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-body.html#request-body-search-highlighting).
 
@@ -674,8 +675,8 @@ Restaurant::search('Dominos')
     ->get();
 ```
 
-Debugging
------
+# Debugging queries
+
 You can debug by explaining the query.
 
 ```php
