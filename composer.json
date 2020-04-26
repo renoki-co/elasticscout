@@ -5,12 +5,13 @@
     "keywords": [
         "elastic", "elasticsearch", "driver", "engine", "laravel", "scout", "search"
     ],
-    "homepage": "https://github.com/rennokki/elasticscout",
+    "homepage": "https://github.com/renoki-co/elasticscout",
     "license": "MIT",
     "authors": [
         {
             "name": "Alex Renoki",
-            "email": "rennokki@gmail.com",
+            "email": "alex@renoki.org",
+            "homepage": "https://github.com/rennokki",
             "role": "Developer"
         }
     ],
