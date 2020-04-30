@@ -1,3 +1,6 @@
+ElasticScout - Elasticsearch Driver for Laravel Scout
+================
+
 ![CI](https://github.com/renoki-co/elasticscout/workflows/CI/badge.svg?branch=master)
 [![Latest Stable Version](https://poser.pugx.org/rennokki/elasticscout/v/stable)](https://packagist.org/packages/rennokki/elasticscout)
 [![Total Downloads](https://poser.pugx.org/rennokki/elasticscout/downloads)](https://packagist.org/packages/rennokki/elasticscout)
@@ -6,44 +9,11 @@
 [![StyleCI](https://github.styleci.io/repos/233681522/shield?branch=master)](https://github.styleci.io/repos/233681522)
 [![License](https://poser.pugx.org/rennokki/elasticscout/license)](https://packagist.org/packages/rennokki/elasticscout)
 
-ElasticScout - Elasticsearch Driver for Laravel Scout
-================
+ElasticScout is a Laravel Scout driver that interacts with any Elasticsearch server to bring the full-power of Full-Text Search in your models.
 
 This package was shaped from [Babenko Ivan's Elasticscout Driver repo](https://github.com/babenkoivan/scout-elasticsearch-driver).
 
-Contents
-------
-- [ElasticScout - Elasticsearch Driver for Laravel Scout](#elasticscout---elasticsearch-driver-for-laravel-scout)
-  - [Contents](#contents)
-- [Install](#install)
-- [Configuring Scout](#configuring-scout)
-  - [AWS Elasticsearch Service](#aws-elasticsearch-service)
-- [Indexes](#indexes)
-  - [Creating an index](#creating-an-index)
-  - [Attach the index to a model](#attach-the-index-to-a-model)
-  - [Publish the index to Elasticsearch](#publish-the-index-to-elasticsearch)
-- [Search Query](#search-query)
-- [Filter Query](#filter-query)
-    - [Must, Must not, Should, Filter](#must-must-not-should-filter)
-- [Query Customizations](#query-customizations)
-  - [Wheres](#wheres)
-  - [Whens, Unless, Dynamic Wheres](#whens-unless-dynamic-wheres)
-  - [Regex filters](#regex-filters)
-  - [Existence check](#existence-check)
-  - [Geo-type searches](#geo-type-searches)
-  - [Working with Scopes](#working-with-scopes)
-- [Query Caching](#query-caching)
-- [Elasticsearch Rules](#elasticsearch-rules)
-  - [Query Payload](#query-payload)
-  - [Highlight Payload](#highlight-payload)
-- [Debugging queries](#debugging-queries)
-  - [Testing](#testing)
-  - [Contributing](#contributing)
-  - [Security](#security)
-  - [Credits](#credits)
-  - [License](#license)
-
-# Install
+## 🚀 Installation
 
 Install the package using Composer CLI:
 
@@ -81,7 +51,7 @@ Then you can access it like you normally would:
 ElasticScout::indices()->get(['index' => '*']);
 ```
 
-# Configuring Scout
+### Configuring Scout
 
 In your `.env` file, set yout `SCOUT_DRIVER` to `elasticscout`, alongside with Elasticsearch configuration:
 
@@ -92,7 +62,7 @@ SCOUT_ELASTICSEARCH_HOST=localhost
 SCOUT_ELASTICSEARCH_PORT=9200
 ```
 
-## AWS Elasticsearch Service
+### AWS Elasticsearch Service
 
 Amazon Elasticsearch Service works perfectly fine without any additional setup for VPC Clusters. However, it is a bit freaky about Public clusters because it requires IAM authentication.
 
@@ -121,9 +91,9 @@ SCOUT_ELASTICSEARCH_SCHEME=https
 
 Please keep in mind: you do not need user & password for AWS Elasticsearch Service clusters.
 
-# Indexes
+## 📄 Indexes
 
-## Creating an index
+### Creating an index
 
 In Elasticsearch, the Index is the equivalent of a table in MySQL, or a collection in MongoDB. You can create an index class using artisan:
 
@@ -210,7 +180,7 @@ class PostIndex extends Index
 }
 ```
 
-## Attach the index to a model
+### Attach the index to a model
 
 All the models that can be searched into should use the `Rennokki\ElasticScout\Searchable` trait and implement the `Rennokki\ElasticScout\Index\HasElasticScoutIndex` interface:
 
@@ -248,7 +218,7 @@ class Post extends Model implements HasElasticScoutIndex
 }
 ```
 
-## Publish the index to Elasticsearch
+### Publish the index to Elasticsearch
 To publish the index to Elasticsearch, you should sync the index:
 
 ```bash
@@ -267,7 +237,7 @@ $restaurant = Restaurant::first();
 $restaurant->getIndex()->sync(); // returns true/false
 ```
 
-# Search Query
+## 🔍 Search Query
 
 To query data into Elasticsearch, you may use the `search()` method:
 
@@ -284,7 +254,7 @@ In case you want just the number of the documents, you can do so:
 $posts = Post::search('Lumen')->count();
 ```
 
-# Filter Query
+## 🔺 Filter Query
 
 ElasticScout allows you to create a custom query using built-in methods by going through the `elasticsearch()` method.
 
@@ -301,7 +271,7 @@ Post::elasticsearch()
     ->get();
 ```
 
-# Query Customizations
+## ⚗️ Query Customizations
 
 You can append data to body or query keys.
 
@@ -455,7 +425,7 @@ $nearbyRestaurants =
     Restaurant::search('Dominos')->nearby(45, 35, 1000)->get();
 ```
 
-# Query Caching
+## Query Caching
 
 Query-by-query caching is available using [rennokki/laravel-eloquent-query-cache](https://github.com/renoki-co/laravel-eloquent-query-cache). All you have to do is to check the repository on how to use it.
 
@@ -469,7 +439,7 @@ $booksByJohnGreen =
         ->get();
 ```
 
-# Elasticsearch Rules
+## Elasticsearch Rules
 
 A search rule is a class that can be used on multiple queries, helping you to define custom payload only once. This works only for the Search Query builder.
 
@@ -527,7 +497,7 @@ class NameRule extends SearchRule
 }
 ```
 
-## Query Payload
+### Query Payload
 
 Within the `buildQueryPayload()`, you should define the query payload that will take place during the query.
 
@@ -601,7 +571,7 @@ Restaurant::search('Dominos')
     ])->get();
 ```
 
-## Highlight Payload
+### Highlight Payload
 When building the highlight payload, you can pass the array to the `buildHighlightPayload()` method.
 More details on highlighting can be found [in the Elasticsearch documentation](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-body.html#request-body-search-highlighting).
 
@@ -675,7 +645,7 @@ Restaurant::search('Dominos')
     ->get();
 ```
 
-# Debugging queries
+## 🐛 Debugging queries
 
 You can debug by explaining the query.
 
@@ -689,26 +659,26 @@ You can see how the payload looks like by calling `getPayload()`.
 Restaurant::search('Dominos')->getPayload();
 ```
 
-## Testing
+## 🐛 Testing
 
 ``` bash
 vendor/bin/phpunit
 ```
 
-## Contributing
+## 🤝 Contributing
 
 Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
-## Security
+## 🔒  Security
 
 If you discover any security related issues, please email alex@renoki.org instead of using the issue tracker.
 
-## Credits
+## 🎉 Credits
 
 - [Alex Renoki](https://github.com/rennokki)
 - [Ivan Babenko](https://github.com/babenkoivan)
 - [All Contributors](../../contributors)
 
-## License
+## 📄 License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
