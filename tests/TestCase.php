@@ -13,9 +13,7 @@ use Rennokki\ElasticScout\Tests\Models\Restaurant;
 abstract class TestCase extends Orchestra
 {
     /**
-     * Set up the test case.
-     *
-     * @return void
+     * {@inheritdoc}
      */
     public function setUp(): void
     {
@@ -34,10 +32,7 @@ abstract class TestCase extends Orchestra
     }
 
     /**
-     * Get the package providers for the app.
-     *
-     * @param  mixed  $app
-     * @return array
+     * {@inheritdoc}
      */
     protected function getPackageProviders($app)
     {
@@ -48,10 +43,7 @@ abstract class TestCase extends Orchestra
     }
 
     /**
-     * Define environment setup.
-     *
-     * @param  \Illuminate\Foundation\Application  $app
-     * @return void
+     * {@inheritdoc}
      */
     protected function getEnvironmentSetUp($app)
     {
