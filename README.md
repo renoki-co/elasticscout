@@ -225,6 +225,7 @@ class Post extends Model implements HasElasticScoutIndex
 ```
 
 ### Publish the index to Elasticsearch
+
 To publish the index to Elasticsearch, you should sync the index:
 
 ```bash
@@ -241,6 +242,27 @@ Syncing the index can also be done within your code:
 $restaurant = Restaurant::first();
 
 $restaurant->getIndex()->sync(); // returns true/false
+```
+
+### Sync indexes automatically with Elasticsearch
+
+A good practice is to keep in sync all your indexes with your models. For example, later on, updating a mapping will require another sync.
+
+In CI/CD pipelines and deployments, this can take more commands to sync them out:
+
+```bash
+$ php artisan elasticscout:index:sync App\\Post
+$ php artisan elasticscout:index:sync App\\Restaurant
+$ php artisan elasticscout:index:sync App\\Book
+...
+```
+
+For this, ElasticScout comes with a handy `elasticscout:migrate` command that can drop and/or reimport the indexes when needed.
+
+```php
+# recreate index and reimport the models from database
+
+$ php artisan elasticscout:migrate App\\Post App\\Restaurant App\\Book --drop --import
 ```
 
 ## 🔍 Search Query
