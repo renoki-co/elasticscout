@@ -1,10 +1,13 @@
 <?php
 
 return [
-    /*
-     * Define your Elasticsearch connection here.
-     */
+
     'connection' => [
+
+        /*
+         * Define your Elasticsearch connection here.
+         */
+
         'hosts' => [
             [
                 'host' => env('SCOUT_ELASTICSEARCH_HOST', '127.0.0.1'),
@@ -35,6 +38,7 @@ return [
          *
          * @see https://www.elastic.co/guide/en/elasticsearch/client/php-api/2.0/_security.html#_ssl_encryption_2
          */
+
         'sslVerification' => null,
 
         /**
@@ -46,6 +50,7 @@ return [
          *
          * @see https://www.elastic.co/guide/en/elasticsearch/client/php-api/2.0/_configuration.html#_set_retries
          */
+
         'retries' => null,
 
         /**
@@ -60,6 +65,7 @@ return [
          *
          * @see https://www.elastic.co/guide/en/elasticsearch/client/php-api/2.0/_configuration.html
          */
+
         'sniffOnStart' => false,
 
         /**
@@ -68,6 +74,7 @@ return [
          * @see https://www.elastic.co/guide/en/elasticsearch/client/php-api/2.0/_configuration.html#_configure_the_http_handler
          * @see http://ringphp.readthedocs.org/en/latest/client_handlers.html
          */
+
         'httpHandler' => null,
 
         /**
@@ -76,6 +83,7 @@ return [
          * @see https://www.elastic.co/guide/en/elasticsearch/client/php-api/2.0/_configuration.html#_setting_the_connection_pool
          * @see https://www.elastic.co/guide/en/elasticsearch/client/php-api/2.0/_connection_pool.html
          */
+
         'connectionPool' => null,
 
         /**
@@ -84,6 +92,7 @@ return [
          * @see https://www.elastic.co/guide/en/elasticsearch/client/php-api/2.0/_configuration.html#_setting_the_connection_selector
          * @see https://www.elastic.co/guide/en/elasticsearch/client/php-api/2.0/_selectors.html
          */
+
         'connectionSelector' => null,
 
         /**
@@ -92,6 +101,7 @@ return [
          * @see https://www.elastic.co/guide/en/elasticsearch/client/php-api/2.0/_configuration.html#_setting_the_serializer
          * @see https://www.elastic.co/guide/en/elasticsearch/client/php-api/2.0/_serializers.html
          */
+
         'serializer' => null,
 
         /**
@@ -99,6 +109,7 @@ return [
          *
          * @see https://www.elastic.co/guide/en/elasticsearch/client/php-api/2.0/_configuration.html#_setting_a_custom_connectionfactory
          */
+
         'connectionFactory' => null,
 
         /**
@@ -106,6 +117,7 @@ return [
          *
          * @see https://www.elastic.co/guide/en/elasticsearch/client/php-api/6.0/_configuration.html#_set_the_endpoint_closure
          */
+
         'endpoint' => null,
 
         /**
@@ -116,6 +128,7 @@ return [
          * @example 'namespaces' => [XPack::Security(), XPack::Watcher()]
          * @see https://www.elastic.co/guide/en/elasticsearch/client/php-api/current/ElasticsearchPHP_Endpoints.html#Elasticsearch_ClientBuilderregisterNamespace_registerNamespace
          */
+
         'namespaces' => [],
     ],
 
@@ -128,12 +141,14 @@ return [
      * MultipleIndexer indexes the data in bulks.
      * \Rennokki\ElasticScout\Indexers\MultipleIndexer::class
      */
+
     'indexer' => \Rennokki\ElasticScout\Indexers\SimpleIndexer::class,
 
     /*
      * Each time a document is created, updated or deleted, update the mapping
      * attached to the index of the model.
      */
+
     'sync_mapping_on_save' => env('SCOUT_ELASTICSEARCH_SYNC_MAPPING_ON_SAVE', true),
 
     /*
@@ -144,5 +159,6 @@ return [
      * Recommended for production: false
      * Recommended for local/testing: true
      */
+
     'refresh_document_on_save' => env('SCOUT_ELASTICSEARCH_REFRESH_DOCUMENT_ON_SAVE', true),
 ];
