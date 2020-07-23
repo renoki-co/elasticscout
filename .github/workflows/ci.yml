@@ -41,7 +41,7 @@ jobs:
         key: composer-php-${{ matrix.php }}-${{ hashFiles('composer.json') }}
     - name: Install dependencies
       run: |
-        composer install --no-interaction --prefer-stable
+        composer update --no-interaction --prefer-stable
     - name: Wait for Elasticsearch to be ready
       run: |
         until curl --silent -XGET --fail http://127.0.0.1:9200; do printf '.'; sleep 1; done
