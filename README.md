@@ -1,6 +1,8 @@
 ElasticScout - Elasticsearch Driver for Laravel Scout
 ================
 
+![](images/elasticscout.png)
+
 ![CI](https://github.com/renoki-co/elasticscout/workflows/CI/badge.svg?branch=master)
 [![Latest Stable Version](https://poser.pugx.org/rennokki/elasticscout/v/stable)](https://packagist.org/packages/rennokki/elasticscout)
 [![Total Downloads](https://poser.pugx.org/rennokki/elasticscout/downloads)](https://packagist.org/packages/rennokki/elasticscout)
