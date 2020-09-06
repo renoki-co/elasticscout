@@ -13,19 +13,33 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     strategy:
       matrix:
         php: ['7.2', '7.3', '7.4']
-        es: ['7.1.1', '7.2.1', '7.3.2', '7.4.2', '7.5.2', '7.6.2', '7.7.1', '7.8.1', '7.9.1']
-    name: PHP ${{ matrix.php }} with ES ${{ matrix.es }}
+        es: ['7.4.2', '7.5.2', '7.6.2', '7.7.1', '7.8.1', '7.9.1']
+        laravel: ['6.*', '7.*', '8.*']
+        prefer: ['prefer-lowest', 'prefer-stable']
+        include:
+          - laravel: '6.*'
+            testbench: '4.*'
+          - laravel: '7.*'
+            testbench: '5.*'
+          - laravel: '8.*'
+            testbench: '6.*'
+
+    name: PHP ${{ matrix.php }} - ES ${{ matrix.es }} Laravel ${{ matrix.laravel }} --${{ matrix.prefer }}
+
     steps:
     - uses: actions/checkout@v1
+
     - name: Configure sysctl limits
       run: |
         sudo swapoff -a
         sudo sysctl -w vm.swappiness=1
         sudo sysctl -w fs.file-max=262144
         sudo sysctl -w vm.max_map_count=262144
+
     - uses: getong/elasticsearch-action@v1.2
       with:
         elasticsearch version: '${{ matrix.es }}'
@@ -34,25 +48,32 @@ jobs:
         host node port: 9300
         node port: 9300
         discovery type: 'single-node'
+
     - uses: actions/cache@v1
       name: Cache dependencies
       with:
         path: ~/.composer/cache/files
-        key: composer-php-${{ matrix.php }}-${{ hashFiles('composer.json') }}
+        key: composer-php-${{ matrix.php }}-${{ matrix.laravel }}-${{ matrix.prefer }}-${{ hashFiles('composer.json') }}
+
     - name: Install dependencies
       run: |
-        composer update --no-interaction --prefer-stable
+        composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" "orchestra/database:${{ matrix.testbench }}" --no-interaction --no-update
+        composer update --${{ matrix.prefer }} --prefer-dist --no-interaction --no-suggest
+
     - name: Wait for Elasticsearch to be ready
       run: |
         until curl --silent -XGET --fail http://127.0.0.1:9200; do printf '.'; sleep 1; done
+
     - name: Run tests for Simple Indexer
       run: |
         export SCOUT_ELASTICSEARCH_INDEXER_CLASS="\Rennokki\ElasticScout\Indexers\SimpleIndexer"
         phpunit --coverage-text --coverage-clover=coverage_simple.xml
+
     - name: Run tests for Multiple Indexer
       run: |
         export SCOUT_ELASTICSEARCH_INDEXER_CLASS="\Rennokki\ElasticScout\Indexers\MultipleIndexer"
         phpunit --coverage-text --coverage-clover=coverage_multiple.xml
+
     - uses: codecov/codecov-action@v1
       with:
         fail_ci_if_error: false
