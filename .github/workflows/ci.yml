@@ -27,6 +27,18 @@ jobs:
             testbench: '5.*'
           - laravel: '8.*'
             testbench: '6.*'
+          - es: '7.4.2'
+            es-php: '7.4.*'
+          - es: '7.5.2'
+            es-php: '7.5.*'
+          - es: '7.6.2'
+            es-php: '7.6.*'
+          - es: '7.7.1'
+            es-php: '7.7.*'
+          - es: '7.8.1'
+            es-php: '7.8.*'
+          - es: '7.9.1'
+            es-php: '7.9.*'
 
     name: PHP ${{ matrix.php }} - ES ${{ matrix.es }} Laravel ${{ matrix.laravel }} --${{ matrix.prefer }}
 
@@ -57,7 +69,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" "orchestra/database:${{ matrix.testbench }}" --no-interaction --no-update
+        composer require "laravel/framework:${{ matrix.laravel }}" "elasticsearch/elasticsearch:${{ matrix.es-php }}" "orchestra/testbench:${{ matrix.testbench }}" "orchestra/database:${{ matrix.testbench }}" --no-interaction --no-update
         composer update --${{ matrix.prefer }} --prefer-dist --no-interaction --no-suggest
 
     - name: Wait for Elasticsearch to be ready
