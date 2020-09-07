@@ -75,10 +75,10 @@ SCOUT_ELASTICSEARCH_PORT=9200
 Amazon Elasticsearch Service works perfectly fine without any additional setup for VPC Clusters. However, it is a bit freaky about Public clusters because it requires IAM authentication.
 
 You will first make sure that you have the right version of `elasticsearch/elasticsearch` package installed.
-For instance, for a `7.1` cluster, you should install `elasticsearch/elasticsearch:"7.1.*"`, otherwise you will receive errors in your application.
+For instance, for a `7.4` cluster, you should install `elasticsearch/elasticsearch:"7.4.*"`, otherwise you will receive errors in your application.
 
 ```bash
-$ composer require elasticsearch/elasticsearch:"7.1.*"
+$ composer require elasticsearch/elasticsearch:"7.4.*"
 ```
 
 To find the right package size, check the [Elasticsearch's Version Matrix](https://github.com/elastic/elasticsearch-php#version-matrix).
