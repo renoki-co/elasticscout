@@ -69,7 +69,6 @@ jobs:
 
     - name: Install dependencies
       run: |
-        composer self-update
         composer require "laravel/framework:${{ matrix.laravel }}" "elasticsearch/elasticsearch:${{ matrix.es-php }}" "orchestra/testbench:${{ matrix.testbench }}" "orchestra/database:${{ matrix.testbench }}" --no-interaction --no-update
         composer update --${{ matrix.prefer }} --prefer-dist --no-interaction --no-suggest
 
