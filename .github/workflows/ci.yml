@@ -19,7 +19,6 @@ jobs:
         php: ['7.2', '7.3', '7.4']
         es: ['7.4.2', '7.5.2', '7.6.2', '7.7.1', '7.8.1', '7.9.1']
         laravel: ['6.*', '7.*', '8.*']
-        prefer: ['prefer-lowest', 'prefer-stable']
         include:
           - laravel: '6.*'
             testbench: '4.*'
@@ -40,7 +39,7 @@ jobs:
           - es: '7.9.1'
             es-php: '7.9.*'
 
-    name: PHP ${{ matrix.php }} - ES ${{ matrix.es }} Laravel ${{ matrix.laravel }} --${{ matrix.prefer }}
+    name: PHP ${{ matrix.php }} - ES ${{ matrix.es }} Laravel ${{ matrix.laravel }}
 
     steps:
     - uses: actions/checkout@v1
@@ -65,12 +64,12 @@ jobs:
       name: Cache dependencies
       with:
         path: ~/.composer/cache/files
-        key: composer-php-${{ matrix.php }}-${{ matrix.laravel }}-${{ matrix.prefer }}-${{ hashFiles('composer.json') }}
+        key: composer-php-${{ matrix.php }}-${{ matrix.laravel }}-${{ hashFiles('composer.json') }}
 
     - name: Install dependencies
       run: |
         composer require "laravel/framework:${{ matrix.laravel }}" "elasticsearch/elasticsearch:${{ matrix.es-php }}" "orchestra/testbench:${{ matrix.testbench }}" "orchestra/database:${{ matrix.testbench }}" --no-interaction --no-update
-        composer update --${{ matrix.prefer }} --prefer-dist --no-interaction --no-suggest
+        composer update --prefer-stable --prefer-dist --no-interaction --no-suggest
 
     - name: Wait for Elasticsearch to be ready
       run: |
