@@ -15,10 +15,9 @@ class RuleTest extends TestCase
         $post->save();
         $post->searchable();
 
-        $searchResult =
-            Post::search('How')
-                ->addRule(new NameHighlightRule)
-                ->first();
+        $searchResult = Post::search('How')
+            ->addRule(new NameHighlightRule)
+            ->first();
 
         $this->assertEquals(
             '<em>How</em> to breathe',
@@ -33,15 +32,13 @@ class RuleTest extends TestCase
         $post->save();
         $post->searchable();
 
-        $searchResultWithoutName =
-            Post::search('How to breathe')
-                ->addRule(new NameRule)
-                ->first();
+        $searchResultWithoutName = Post::search('How to breathe')
+            ->addRule(new NameRule)
+            ->first();
 
-        $searchResultWithName =
-                Post::search('Not important')
-                    ->addRule(new NameRule('How to breathe'))
-                    ->first();
+        $searchResultWithName = Post::search('Not important')
+            ->addRule(new NameRule('How to breathe'))
+            ->first();
 
         $this->assertTrue(
             $searchResultWithoutName->is($searchResultWithName)

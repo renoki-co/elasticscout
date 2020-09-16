@@ -429,8 +429,9 @@ class Restaurant extends Model
     }
 }
 
-$nearbyRestaurants =
-    Restaurant::search('Dominos')->nearby(45, 35, 1000)->get();
+$nearbyRestaurants = Restaurant::search('Dominos')
+    ->nearby(45, 35, 1000)
+    ->get();
 ```
 
 ## Query Caching
@@ -440,11 +441,10 @@ Query-by-query caching is available using [rennokki/laravel-eloquent-query-cache
 Basically, you can cache requests like so:
 
 ```php
-$booksByJohnGreen =
-    Book::elasticsearch()
-        ->cacheFor(now()->addMinutes(60))
-        ->where('author', 'John Green')
-        ->get();
+$booksByJohnGreen = Book::elasticsearch()
+    ->cacheFor(now()->addMinutes(60))
+    ->where('author', 'John Green')
+    ->get();
 ```
 
 ## Elasticsearch Rules

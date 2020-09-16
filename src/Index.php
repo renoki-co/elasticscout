@@ -161,8 +161,7 @@ abstract class Index
      */
     public function exists(): bool
     {
-        return ElasticClient::indices()
-            ->exists($this->getPayload());
+        return ElasticClient::indices()->exists($this->getPayload());
     }
 
     /**
@@ -177,8 +176,7 @@ abstract class Index
             return false;
         }
 
-        return ElasticClient::indices()
-            ->existsAlias($this->getPayload(true));
+        return ElasticClient::indices()->existsAlias($this->getPayload(true));
     }
 
     /**
@@ -194,11 +192,9 @@ abstract class Index
         }
 
         // Set settings of the index right at creation.
-        $payload =
-            $this
-                ->getPayloadInstance()
-                ->setIfNotEmpty('body.settings', $this->getSettings())
-                ->get();
+        $payload = $this->getPayloadInstance()
+            ->setIfNotEmpty('body.settings', $this->getSettings())
+            ->get();
 
         ElasticClient::indices()
             ->create($payload);
@@ -246,8 +242,7 @@ abstract class Index
             ->set('index', $this->getAliasName())
             ->get();
 
-        ElasticClient::indices()
-            ->delete($payload);
+        ElasticClient::indices()->delete($payload);
 
         return true;
     }
@@ -291,8 +286,7 @@ abstract class Index
             return false;
         }
 
-        ElasticClient::indices()
-            ->putAlias($this->getPayload(true));
+        ElasticClient::indices()->putAlias($this->getPayload(true));
 
         return true;
     }
@@ -312,11 +306,9 @@ abstract class Index
             $this->sync();
         }
 
-        $payload =
-            $this
-                ->getModelPayloadInstance()
-                ->set("body.{$this->model->searchableAs()}", $this->getMapping())
-                ->set('include_type_name', 'true');
+        $payload = $this->getModelPayloadInstance()
+            ->set("body.{$this->model->searchableAs()}", $this->getMapping())
+            ->set('include_type_name', 'true');
 
         if ($this->isMigratable()) {
             $payload = $payload->withAlias('write');
@@ -343,24 +335,18 @@ abstract class Index
             $this->sync();
         }
 
-        $payload =
-            $this
-                ->getPayloadInstance()
-                ->set('body.settings', $this->getSettings())
-                ->get();
+        $payload = $this->getPayloadInstance()
+            ->set('body.settings', $this->getSettings())
+            ->get();
 
         try {
-            ElasticClient::indices()
-                ->close($this->getPayload());
+            ElasticClient::indices()->close($this->getPayload());
 
-            ElasticClient::indices()
-                ->putSettings($payload);
+            ElasticClient::indices()->putSettings($payload);
 
-            ElasticClient::indices()
-                ->open($this->getPayload());
+            ElasticClient::indices()->open($this->getPayload());
         } catch (Exception $e) {
-            ElasticClient::indices()
-                ->open($this->getPayload());
+            ElasticClient::indices()->open($this->getPayload());
 
             return false;
         }
@@ -375,8 +361,7 @@ abstract class Index
      */
     public function getRaw(): array
     {
-        return ElasticClient::indices()->get($this->getPayload())
-            [$this->getName()] ?? [];
+        return ElasticClient::indices()->get($this->getPayload())[$this->getName()] ?? [];
     }
 
     /**
@@ -386,8 +371,7 @@ abstract class Index
      */
     public function getRawMapping(): array
     {
-        return ElasticClient::indices()->getMapping($this->getPayload())
-            [$this->getName()]['mappings'] ?? [];
+        return ElasticClient::indices()->getMapping($this->getPayload())[$this->getName()]['mappings'] ?? [];
     }
 
     /**
@@ -397,7 +381,6 @@ abstract class Index
      */
     public function getRawSettings(): array
     {
-        return ElasticClient::indices()->getSettings($this->getPayload())
-            [$this->getName()]['settings']['index'] ?? [];
+        return ElasticClient::indices()->getSettings($this->getPayload())[$this->getName()]['settings']['index'] ?? [];
     }
 }

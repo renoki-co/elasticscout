@@ -49,8 +49,7 @@ class ElasticScoutServiceProvider extends ServiceProvider
             __DIR__.'/../config/elasticscout.php' => config_path('elasticscout.php'),
         ]);
 
-        $this
-            ->app
+        $this->app
             ->make(EngineManager::class)
             ->extend('elasticscout', function () {
                 $indexer = config('elasticscout.indexer', \Rennokki\ElasticScout\Indexers\SimpleIndexer::class);
@@ -82,8 +81,7 @@ class ElasticScoutServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this
-            ->app
+        $this->app
             ->singleton('elasticscout.client', function () {
                 $connection = Config::get('elasticscout.connection', []);
                 $clientBuilder = ClientBuilder::create();

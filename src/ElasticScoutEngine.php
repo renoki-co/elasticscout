@@ -69,9 +69,7 @@ class ElasticScoutEngine extends Engine
             });
         }
 
-        $this
-            ->indexer
-            ->update($models);
+        $this->indexer->update($models);
     }
 
     /**
@@ -79,9 +77,7 @@ class ElasticScoutEngine extends Engine
      */
     public function delete($models)
     {
-        $this
-            ->indexer
-            ->delete($models);
+        $this->indexer->delete($models);
     }
 
     /**
@@ -93,21 +89,12 @@ class ElasticScoutEngine extends Engine
      */
     public function buildSearchQueryPayloadCollection(Builder $builder, array $options = [])
     {
-        if ($builder instanceof SearchQueryBuilder) {
-            $payloadCollection =
-                $this->initializeSearchQueryPayloadBuilder(
-                    $builder, $options
-                );
-        } else {
-            $payloadCollection =
-                $this->initializeElasticsearchPayloadBuilder(
-                    $builder, $options
-                );
-        }
+        $payloadCollection = $builder instanceof SearchQueryBuilder
+            ? $this->initializeSearchQueryPayloadBuilder($builder, $options)
+            : $this->initializeElasticsearchPayloadBuilder($builder, $options);
 
         return $payloadCollection->map(function (TypePayload $payload) use ($builder, $options) {
-            $payload
-                ->setIfNotEmpty('body._source', $builder->select)
+            $payload->setIfNotEmpty('body._source', $builder->select)
                 ->setIfNotEmpty('body.collapse.field', $builder->collapse)
                 ->setIfNotEmpty('body.sort', $builder->orders)
                 ->setIfNotEmpty('body.explain', $options['explain'] ?? null)
@@ -229,8 +216,7 @@ class ElasticScoutEngine extends Engine
     {
         $results = [];
 
-        $this
-            ->buildSearchQueryPayloadCollection($builder, $options)
+        $this->buildSearchQueryPayloadCollection($builder, $options)
             ->each(function ($payload) use (&$results) {
                 $results = ElasticClient::search($payload);
 
@@ -257,8 +243,7 @@ class ElasticScoutEngine extends Engine
      */
     public function paginate(Builder $builder, $perPage, $page)
     {
-        $builder
-            ->from(($page - 1) * $perPage)
+        $builder->from(($page - 1) * $perPage)
             ->take($perPage);
 
         return $this->performSearch($builder);
@@ -300,8 +285,7 @@ class ElasticScoutEngine extends Engine
     {
         $count = 0;
 
-        $this
-            ->buildSearchQueryPayloadCollection($builder, ['highlight' => false])
+        $this->buildSearchQueryPayloadCollection($builder, ['highlight' => false])
             ->each(function ($payload) use (&$count) {
                 $result = ElasticClient::count($payload);
 
@@ -346,8 +330,7 @@ class ElasticScoutEngine extends Engine
 
         $query = $model::usesSoftDelete() ? $model->withTrashed() : $model->newQuery();
 
-        $models = $query
-            ->whereIn($scoutKeyName, $ids)
+        $models = $query->whereIn($scoutKeyName, $ids)
             ->get($columns)
             ->keyBy($scoutKeyName);
 
@@ -384,8 +367,7 @@ class ElasticScoutEngine extends Engine
     {
         $query = $model::usesSoftDelete() ? $model->withTrashed() : $model->newQuery();
 
-        $query
-            ->orderBy($model->getScoutKeyName())
+        $query->orderBy($model->getScoutKeyName())
             ->unsearchable();
     }
 }

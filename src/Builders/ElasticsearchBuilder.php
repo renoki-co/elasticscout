@@ -563,9 +563,7 @@ class ElasticsearchBuilder extends Builder implements QueryCacheModuleInterface
             return $this->getFromQueryCache('count');
         }
 
-        return $this
-            ->engine()
-            ->count($this);
+        return $this->engine()->count($this);
     }
 
     /**
@@ -576,9 +574,7 @@ class ElasticsearchBuilder extends Builder implements QueryCacheModuleInterface
         $paginator = parent::paginate($perPage, $pageName, $page);
 
         if (isset($this->with) && $paginator->total() > 0) {
-            $paginator
-                ->getCollection()
-                ->load($this->with);
+            $paginator->getCollection()->load($this->with);
         }
 
         return $paginator;
@@ -618,13 +614,12 @@ class ElasticsearchBuilder extends Builder implements QueryCacheModuleInterface
      */
     public function withTrashed()
     {
-        $this->wheres['must'] =
-            collect($this->wheres['must'])
-                ->filter(function ($item) {
-                    return Arr::get($item, 'term.__soft_deleted') !== 0;
-                })
-                ->values()
-                ->all();
+        $this->wheres['must'] = collect($this->wheres['must'])
+            ->filter(function ($item) {
+                return Arr::get($item, 'term.__soft_deleted') !== 0;
+            })
+            ->values()
+            ->all();
 
         return $this;
     }
@@ -646,9 +641,7 @@ class ElasticsearchBuilder extends Builder implements QueryCacheModuleInterface
      */
     public function explain()
     {
-        return $this
-            ->engine()
-            ->explain($this);
+        return $this->engine()->explain($this);
     }
 
     /**
@@ -658,9 +651,7 @@ class ElasticsearchBuilder extends Builder implements QueryCacheModuleInterface
      */
     public function profile()
     {
-        return $this
-            ->engine()
-            ->profile($this);
+        return $this->engine()->profile($this);
     }
 
     /**
@@ -670,9 +661,7 @@ class ElasticsearchBuilder extends Builder implements QueryCacheModuleInterface
      */
     public function getPayload()
     {
-        return $this
-            ->engine()
-            ->buildSearchQueryPayloadCollection($this);
+        return $this->engine()->buildSearchQueryPayloadCollection($this);
     }
 
     /**

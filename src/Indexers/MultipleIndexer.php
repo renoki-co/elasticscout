@@ -44,8 +44,7 @@ class MultipleIndexer implements Indexer
             $actionPayload = Payload::raw()
                 ->set('index._id', $model->getScoutKey());
 
-            $payload
-                ->add('body', $actionPayload->get())
+            $payload->add('body', $actionPayload->get())
                 ->add('body', $modelData);
         });
 

@@ -412,11 +412,10 @@ class QueryTest extends TestCase
 
     public function test_append_to_body()
     {
-        $payload =
-            Book::elasticsearch()
-                ->appendToBody('minimum_should_match', 1)
-                ->getPayload()
-                ->toArray();
+        $payload = Book::elasticsearch()
+            ->appendToBody('minimum_should_match', 1)
+            ->getPayload()
+            ->toArray();
 
         $this->assertEquals(
             1, Arr::get($payload[0], 'body.minimum_should_match')
@@ -425,11 +424,10 @@ class QueryTest extends TestCase
 
     public function test_append_to_query()
     {
-        $payload =
-            Book::elasticsearch()
-                ->appendToQuery('should', 'yes')
-                ->getPayload()
-                ->toArray();
+        $payload = Book::elasticsearch()
+            ->appendToQuery('should', 'yes')
+            ->getPayload()
+            ->toArray();
 
         $this->assertEquals(
             'yes', Arr::get($payload[0], 'body.query.should')
