@@ -6,7 +6,7 @@
         "elastic", "elasticsearch", "driver", "engine", "laravel", "scout", "search"
     ],
     "homepage": "https://github.com/renoki-co/elasticscout",
-    "license": "MIT",
+    "license": "Apache-2.0",
     "authors": [
         {
             "name": "Alex Renoki",
