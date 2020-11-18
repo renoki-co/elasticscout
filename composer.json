@@ -6,7 +6,7 @@
         "elastic", "elasticsearch", "driver", "engine", "laravel", "scout", "search"
     ],
     "homepage": "https://github.com/renoki-co/elasticscout",
-    "license": "MIT",
+    "license": "Apache-2.0",
     "authors": [
         {
             "name": "Alex Renoki",
@@ -16,14 +16,15 @@
         }
     ],
     "require": {
-        "elasticsearch/elasticsearch": ">=7.1",
-        "laravel/scout": "^8.0",
+        "elasticsearch/elasticsearch": ">=7.4",
+        "laravel/scout": "^8.3",
         "aws/aws-sdk-php": "^3.132",
-        "rennokki/laravel-eloquent-query-cache": "^1.3 || ^2.0"
+        "rennokki/laravel-eloquent-query-cache": "^2.0"
     },
     "require-dev": {
-        "orchestra/testbench": "^5.0",
-        "orchestra/database": "^5.0"
+        "laravel/legacy-factories": "^1.0.4",
+        "orchestra/database": "^4.0|^5.0|^6.0",
+        "orchestra/testbench": "^4.0|^5.0|^6.0"
     },
     "autoload": {
         "psr-4": {
@@ -35,6 +36,10 @@
             "Rennokki\\ElasticScout\\Tests\\": "tests/"
         }
     },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
     "extra": {
         "laravel": {
             "providers": [

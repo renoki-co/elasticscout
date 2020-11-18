@@ -1,6 +1,8 @@
 ElasticScout - Elasticsearch Driver for Laravel Scout
 ================
 
+![](images/elasticscout.png)
+
 ![CI](https://github.com/renoki-co/elasticscout/workflows/CI/badge.svg?branch=master)
 [![Latest Stable Version](https://poser.pugx.org/rennokki/elasticscout/v/stable)](https://packagist.org/packages/rennokki/elasticscout)
 [![Total Downloads](https://poser.pugx.org/rennokki/elasticscout/downloads)](https://packagist.org/packages/rennokki/elasticscout)
@@ -15,7 +17,7 @@ This package was shaped from [Babenko Ivan's Elasticscout Driver repo](https://g
 
 ## 🤝 Supporting
 
-Renoki Co. on GitHub aims on bringing a lot of open source, MIT-licensed projects and helpful projects to the world. Developing and maintaining projects everyday is a harsh work and tho, we love it.
+Renoki Co. on GitHub aims on bringing a lot of open source projects and helpful projects to the world. Developing and maintaining projects everyday is a harsh work and tho, we love it.
 
 If you are using your application in your day-to-day job, on presentation demos, hobby projects or even school projects, spread some kind words about our work or sponsor our work. Kind words will touch our chakras and vibe, while the sponsorships will keep the open source projects alive.
 
@@ -73,10 +75,10 @@ SCOUT_ELASTICSEARCH_PORT=9200
 Amazon Elasticsearch Service works perfectly fine without any additional setup for VPC Clusters. However, it is a bit freaky about Public clusters because it requires IAM authentication.
 
 You will first make sure that you have the right version of `elasticsearch/elasticsearch` package installed.
-For instance, for a `7.1` cluster, you should install `elasticsearch/elasticsearch:"7.1.*"`, otherwise you will receive errors in your application.
+For instance, for a `7.4` cluster, you should install `elasticsearch/elasticsearch:"7.4.*"`, otherwise you will receive errors in your application.
 
 ```bash
-$ composer require elasticsearch/elasticsearch:"7.1.*"
+$ composer require elasticsearch/elasticsearch:"7.4.*"
 ```
 
 To find the right package size, check the [Elasticsearch's Version Matrix](https://github.com/elastic/elasticsearch-php#version-matrix).
@@ -706,7 +708,3 @@ If you discover any security related issues, please email alex@renoki.org instea
 - [Alex Renoki](https://github.com/rennokki)
 - [Ivan Babenko](https://github.com/babenkoivan)
 - [All Contributors](../../contributors)
-
-## 📄 License
-
-The MIT License (MIT). Please see [License File](LICENSE) for more information.
