@@ -40,7 +40,7 @@ class MigrateIndexesCommand extends Command
     {
         $this->line('Migrating searchable models...');
 
-        if ($this->option('drop') && app()->environment(['production'])) {
+        if ($this->option('drop') && $this->laravel->environment(['production'])) {
             if (! $this->confirm('This will drop ALL your indexes and re-import data. Are you sure?')) {
                 return $this->line('Migration stopped.');
             }
