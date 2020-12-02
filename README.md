@@ -11,6 +11,8 @@ ElasticScout - Elasticsearch Driver for Laravel Scout
 [![StyleCI](https://github.styleci.io/repos/233681522/shield?branch=master)](https://github.styleci.io/repos/233681522)
 [![License](https://poser.pugx.org/rennokki/elasticscout/license)](https://packagist.org/packages/rennokki/elasticscout)
 
+[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/R6R42U8CL)
+
 ElasticScout is a Laravel Scout driver that interacts with any Elasticsearch server to bring the full-power of Full-Text Search in your models.
 
 This package was shaped from [Babenko Ivan's Elasticscout Driver repo](https://github.com/babenkoivan/scout-elasticsearch-driver).
