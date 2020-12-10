@@ -66,13 +66,15 @@ class ElasticScoutServiceProvider extends ServiceProvider
                 return new ElasticScoutEngine(new $indexer(), $syncMappingOnSave);
             });
 
-        $this->commands([
-            SyncIndexCommand::class,
-            DeleteIndexCommand::class,
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                SyncIndexCommand::class,
+                DeleteIndexCommand::class,
 
-            MakeIndexCommand::class,
-            MakeRuleCommand::class,
-        ]);
+                MakeIndexCommand::class,
+                MakeRuleCommand::class,
+            ]);
+        }
     }
 
     /**
