@@ -36,7 +36,7 @@ jobs:
             es-php: '7.7.*'
           - es: '7.8.1'
             es-php: '7.8.*'
-          - es: '7.9.1'
+          - es: '7.9.3'
             es-php: '7.9.*'
 
     name: PHP ${{ matrix.php }} - ES ${{ matrix.es }} Laravel ${{ matrix.laravel }}
