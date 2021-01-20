@@ -17,12 +17,13 @@
     ],
     "require": {
         "elasticsearch/elasticsearch": ">=7.4",
-        "laravel/scout": "^8.3",
+        "laravel/scout": "^8.5",
         "aws/aws-sdk-php": "^3.132",
         "rennokki/laravel-eloquent-query-cache": "^2.0"
     },
     "require-dev": {
-        "laravel/legacy-factories": "^1.0.4",
+        "laravel/legacy-factories": "^1.1",
+        "mockery/mockery": "^1.4",
         "orchestra/database": "^4.0|^5.0|^6.0",
         "orchestra/testbench": "^4.0|^5.0|^6.0"
     },
