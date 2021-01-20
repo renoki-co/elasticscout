@@ -101,13 +101,15 @@ jobs:
 
     - name: Run tests for Simple Indexer
       run: |
-        export SCOUT_ELASTICSEARCH_INDEXER_CLASS="\Rennokki\ElasticScout\Indexers\SimpleIndexer"
-        phpunit --coverage-text --coverage-clover=coverage_simple.xml
+        vendor/bin/phpunit --coverage-text --coverage-clover=coverage_simple.xml
+      env:
+        SCOUT_ELASTICSEARCH_INDEXER_CLASS: '\Rennokki\ElasticScout\Indexers\SimpleIndexer'
 
     - name: Run tests for Multiple Indexer
       run: |
-        export SCOUT_ELASTICSEARCH_INDEXER_CLASS="\Rennokki\ElasticScout\Indexers\MultipleIndexer"
-        phpunit --coverage-text --coverage-clover=coverage_multiple.xml
+        vendor/bin/phpunit --coverage-text --coverage-clover=coverage_multiple.xml
+      env:
+        SCOUT_ELASTICSEARCH_INDEXER_CLASS: '\Rennokki\ElasticScout\Indexers\MultipleIndexer'
 
     - uses: codecov/codecov-action@v1
       with:
