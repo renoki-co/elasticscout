@@ -12,16 +12,31 @@ on:
 
 jobs:
   build:
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
+
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        php: ['7.2', '7.3', '7.4']
-        es: ['7.4.2', '7.5.2', '7.6.2', '7.7.1', '7.8.1', '7.9.3']
-        laravel: ['6.*', '7.*', '8.*']
+        php:
+          - '7.3'
+          - '7.4'
+          - '8.0'
+        es: 
+          - '7.4.2'
+          - '7.5.2'
+          - '7.6.2'
+          - '7.7.1'
+          - '7.8.1'
+          - '7.9.3'
+          - '7.10.2'
+        laravel:
+          - '7.*'
+          - '8.*'
+        prefer:
+          - 'prefer-lowest'
+          - 'prefer-stable'
         include:
-          - laravel: '6.*'
-            testbench: '4.*'
           - laravel: '7.*'
             testbench: '5.*'
           - laravel: '8.*'
@@ -38,11 +53,20 @@ jobs:
             es-php: '7.8.*'
           - es: '7.9.3'
             es-php: '7.9.*'
+          - es: '7.10.2'
+            es-php: '7.10.*'
 
     name: PHP ${{ matrix.php }} - ES ${{ matrix.es }} Laravel ${{ matrix.laravel }}
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php }}
+        extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv
+        coverage: pcov
 
     - name: Configure sysctl limits
       run: |
@@ -64,12 +88,12 @@ jobs:
       name: Cache dependencies
       with:
         path: ~/.composer/cache/files
-        key: composer-php-${{ matrix.php }}-${{ matrix.laravel }}-${{ hashFiles('composer.json') }}
+        key: composer-php-${{ matrix.php }}-${{ matrix.laravel }}-${{ matrix.prefer }}-${{ hashFiles('composer.json') }}
 
     - name: Install dependencies
       run: |
         composer require "laravel/framework:${{ matrix.laravel }}" "elasticsearch/elasticsearch:${{ matrix.es-php }}" "orchestra/testbench:${{ matrix.testbench }}" "orchestra/database:${{ matrix.testbench }}" --no-interaction --no-update
-        composer update --prefer-stable --prefer-dist --no-interaction --no-suggest
+        composer update --${{ matrix.prefer }} --prefer-dist --no-interaction --no-suggest
 
     - name: Wait for Elasticsearch to be ready
       run: |
