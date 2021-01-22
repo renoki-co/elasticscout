@@ -56,7 +56,7 @@ jobs:
           - es: '7.10.2'
             es-php: '7.10.*'
 
-    name: PHP ${{ matrix.php }} - ES ${{ matrix.es }} Laravel ${{ matrix.laravel }}
+    name: PHP ${{ matrix.php }} - ES ${{ matrix.es }} Laravel ${{ matrix.laravel }} --${{ matrix.prefer }}
 
     steps:
     - uses: actions/checkout@v2
